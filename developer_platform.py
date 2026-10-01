@@ -23,6 +23,36 @@ from urllib import error, request
 UTC = timezone.utc
 
 
+class PostgresConnection:
+    def __init__(self, connection: Any):
+        self._connection = connection
+
+    def __enter__(self):
+        self._connection.__enter__()
+        return self
+
+    def __exit__(self, exc_type, exc_value, traceback):
+        return self._connection.__exit__(exc_type, exc_value, traceback)
+
+    def execute(self, query: str, parameters: Any = None):
+        return self._connection.execute(query.replace("?", "%s"), parameters)
+
+    def executescript(self, script: str) -> None:
+        script = script.replace(
+            "INTEGER PRIMARY KEY AUTOINCREMENT",
+            "BIGSERIAL PRIMARY KEY",
+        )
+        for statement in script.split(";"):
+            if statement.strip():
+                self.execute(statement)
+
+    def commit(self) -> None:
+        self._connection.commit()
+
+    def close(self) -> None:
+        self._connection.close()
+
+
 def now_iso() -> str:
     return datetime.now(UTC).isoformat()
 
@@ -99,11 +129,30 @@ class ScreeningReportRecord:
 
 
 class DeveloperPlatform:
-    def __init__(self, db_path: str | None = None):
+    def __init__(
+        self,
+        db_path: str | None = None,
+        *,
+        database_url: str | None = None,
+    ):
         default_path = Path(__file__).parent / "developer_platform.db"
+        self.database_url = database_url or (
+            os.getenv("DATABASE_URL") if db_path is None else None
+        )
         self.db_path = db_path or os.getenv("DEVELOPER_PLATFORM_DB", str(default_path))
 
-    def _connect(self) -> sqlite3.Connection:
+    def _connect(self) -> Any:
+        if self.database_url:
+            try:
+                import psycopg
+                from psycopg.rows import dict_row
+            except ImportError as exc:
+                raise RuntimeError("Install psycopg to use DATABASE_URL") from exc
+
+            return PostgresConnection(
+                psycopg.connect(self.database_url, row_factory=dict_row)
+            )
+
         Path(self.db_path).parent.mkdir(parents=True, exist_ok=True)
         connection = sqlite3.connect(self.db_path)
         connection.row_factory = sqlite3.Row
@@ -209,22 +258,64 @@ class DeveloperPlatform:
                     updated_at TEXT NOT NULL,
                     UNIQUE(attempt_key, window_start)
                 );
+
+                CREATE TABLE IF NOT EXISTS conviction_records (
+                    id INTEGER PRIMARY KEY AUTOINCREMENT,
+                    record_json JSONB NOT NULL
+                );
                 """
             )
             self._ensure_column(connection, "screening_reports", "query_reference", "TEXT")
             self._ensure_column(connection, "screening_reports", "summary_text", "TEXT NOT NULL DEFAULT ''")
 
+    def get_conviction_records(self) -> list[dict[str, Any]]:
+        with self._connect() as connection:
+            rows = connection.execute(
+                "SELECT record_json FROM conviction_records ORDER BY id"
+            ).fetchall()
+
+        return [
+            json.loads(row["record_json"])
+            if isinstance(row["record_json"], str)
+            else row["record_json"]
+            for row in rows
+        ]
+
+    def replace_conviction_records(self, records: list[dict[str, Any]]) -> None:
+        with self._connect() as connection:
+            connection.execute("DELETE FROM conviction_records")
+            if self.database_url:
+                insert_sql = "INSERT INTO conviction_records (record_json) VALUES (?::jsonb)"
+            else:
+                insert_sql = "INSERT INTO conviction_records (record_json) VALUES (?)"
+
+            for record in records:
+                connection.execute(insert_sql, (json.dumps(record),))
+
     def _ensure_column(
         self,
-        connection: sqlite3.Connection,
+        connection: Any,
         table_name: str,
         column_name: str,
         column_definition: str,
     ) -> None:
-        columns = {
-            row["name"]
-            for row in connection.execute(f"PRAGMA table_info({table_name})").fetchall()
-        }
+        if self.database_url:
+            columns = {
+                row["name"]
+                for row in connection.execute(
+                    """
+                    SELECT column_name AS name
+                    FROM information_schema.columns
+                    WHERE table_schema = current_schema() AND table_name = ?
+                    """,
+                    (table_name,),
+                ).fetchall()
+            }
+        else:
+            columns = {
+                row["name"]
+                for row in connection.execute(f"PRAGMA table_info({table_name})").fetchall()
+            }
         if column_name not in columns:
             connection.execute(
                 f"ALTER TABLE {table_name} ADD COLUMN {column_name} {column_definition}"
@@ -240,11 +331,12 @@ class DeveloperPlatform:
                 """
                 INSERT INTO developer_users (email, password_hash, password_salt, created_at)
                 VALUES (?, ?, ?, ?)
+                RETURNING id
                 """,
                 (normalized_email, password_hash, password_salt, created_at),
             )
             return SessionUser(
-                id=cursor.lastrowid,
+                id=cursor.fetchone()["id"],
                 email=normalized_email,
                 created_at=created_at,
             )
@@ -542,7 +634,7 @@ class DeveloperPlatform:
     def create_or_rotate_api_key(
         self,
         user_id: int,
-        connection: sqlite3.Connection | None = None,
+        connection: Any | None = None,
     ) -> str:
         owns_connection = connection is None
         if connection is None:

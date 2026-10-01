@@ -1,4 +1,8 @@
 {
-  "buildCommand": "npm run build",
-  "outputDirectory": "dist"
+  "$schema": "https://openapi.vercel.sh/vercel.json",
+  "functions": {
+    "main.py": {
+      "excludeFiles": "{Frontend/**,docs/**,tests/**,test_*.py,*.csv,developer_platform.db,venv/**}"
+    }
+  }
 }

@@ -1,197 +1,83 @@
-/* Vercel Deployment Guide for FraudCheckr */
+/* FraudCheckr deployment: Vercel Functions + Neon */
 
-## Frontend Deployment (React + Vite) → Vercel
+## Architecture
 
-### Step 1: Connect GitHub Repository
-1. Push your code to GitHub if not already done
-2. Go to [vercel.com](https://vercel.com)
-3. Sign in with GitHub
-4. Click "Add New Project"
-5. Select your `efcc-convictions-explorer` repository
-6. Click "Import"
+Deploy this repository as two Vercel projects:
 
-### Step 2: Configure Build Settings
-- **Framework Preset**: Other
-- **Build Command**: `cd Frontend && npm install && npm run build`
-- **Output Directory**: `Frontend/dist`
-- **Install Command**: `npm install -g pnpm && pnpm install`
+- **API project**: repository root (`.`), using the FastAPI app in `main.py`.
+- **Frontend project**: root directory `Frontend`, using Vite and `Frontend/vercel.json`.
+- **Database**: Neon PostgreSQL, using the pooled connection string for serverless requests.
 
-### Step 3: Add Environment Variables
-In Vercel dashboard, go to Settings → Environment Variables and add:
+The root `vercel.json` configures the Python function bundle. The frontend project uses its own config and does not need API route rewrites because it calls the API project directly.
 
-```
-VITE_API_URL=https://your-backend-api.com
-```
+## Build And Migration Steps
 
-Replace `https://your-backend-api.com` with your actual backend URL (see Backend Deployment below).
+1. **Confirm Neon is ready**
 
-### Step 4: Deploy
-Click "Deploy" and Vercel will automatically build and deploy your React app.
+   In Vercel Storage, open the connected Neon database and copy its pooled connection string. It should use SSL. Keep the value private and do not commit it.
 
----
+2. **Import existing data before deploying the API**
 
-## Backend Deployment (FastAPI)
+   From the repository root, set `DATABASE_URL` in a local PowerShell session to the Neon pooled connection string, then run:
 
-### Option A: Deploy to Railway (Recommended for Quick Setup)
+   ```powershell
+   .\venv\Scripts\python.exe migrate_neon.py
+   ```
 
-1. **Create Account**: Go to [railway.app](https://railway.app)
-2. **Create New Project** → Select "GitHub"
-3. **Select Repository**: Choose your repo
-4. **Add PostgreSQL** (optional, if you need database)
-5. **Create** and Railway will auto-detect Flask/Python app
-6. **Configure**:
-   - Environment: Add `PORT=5000`
-   - Service Port: 5000
-7. **Deploy** and get your public domain
+   The importer creates the application tables, copies records from `developer_platform.db` when that file exists, and processes `efcc_convictions_updated.csv` into the Neon `conviction_records` table. It refuses to run if the target tables already contain data; do not use it as a routine deploy command.
 
-### Option B: Deploy to Render.com
+   Optional source overrides:
 
-1. Go to [render.com](https://render.com)
-2. Click **+ New** → **Web Service**
-3. Select your GitHub repo
-4. **Configure**:
-   - Name: `fraudcheckr-api`
-   - Environment: Python 3
-   - Build Command: `pip install -r requirements.txt`
-   - Start Command: `uvicorn main:app --host 0.0.0.0 --port 5000`
-5. **Deploy**
+   ```powershell
+   .\venv\Scripts\python.exe migrate_neon.py --sqlite-path .\developer_platform.db --csv-path .\efcc_convictions_updated.csv
+   ```
 
-### Option C: Deploy to Heroku
+3. **Create the API Vercel project**
 
-```bash
-# Install Heroku CLI
-# Login
-heroku login
+   Import the same Git repository as a new Vercel project and set **Root Directory** to `.`. Let Vercel detect the Python/FastAPI entrypoint. Do not set the frontend build command or a static output directory on this project. Add these environment variables for Production, Preview, and Development as needed:
 
-# Create app
-heroku create fraudcheckr-api
+   ```text
+   DATABASE_URL=<Neon pooled connection string>
+   ENVIRONMENT=production
+   FRONTEND_ORIGINS=https://<frontend-project>.vercel.app
+   ```
 
-# Deploy
-git push heroku main
+   Also add the existing application secrets such as `PAYSTACK_SECRET_KEY` and any plan configuration required by the developer billing routes. Add custom frontend domains to `FRONTEND_ORIGINS`, comma-separated.
 
-# View logs
-heroku logs --tail
+4. **Create the frontend Vercel project**
+
+   Import the repository again as another Vercel project and set **Root Directory** to `Frontend`. Use the Vite preset, build command `npm run build`, and output directory `dist`. Set:
+
+   ```text
+   VITE_API_URL=https://<api-project>.vercel.app
+   ```
+
+5. **Deploy and verify**
+
+   Deploy the API project first, then the frontend. Check the API root, `/docs`, `/convictions?limit=3`, `/search?name=JOHN`, and `/stats`; then test sign-in, report persistence, and browser CORS from the frontend domain.
+
+6. **Cut over from Railway**
+
+   Keep the old Railway service available until the Vercel API and frontend checks pass. Then update any custom DNS or integrations to the Vercel API URL and retire Railway.
+
+## Data Migration Caveat
+
+This repository's application code used SQLite for developer accounts and did not use Railway PostgreSQL, despite the old deployment guide mentioning it. The importer can copy the local `developer_platform.db` file in this checkout. If Railway had a separate persistent volume or database containing newer account, subscription, or report data, export that data separately and reconcile it before cutover; this script cannot access Railway's filesystem. Conviction records are imported from the checked-in CSV.
+
+## Local Checks
+
+```powershell
+npm --prefix Frontend run build
+uvicorn main:app --reload --port 8000
 ```
 
----
-
-## Update Frontend API Endpoint
-
-Once your backend is deployed, update the API URL in your React components:
-
-### In `Frontend/src/pages/SearchResultsPage.jsx` and other API calls:
-
-Change from:
-```javascript
-const response = await axios.get('http://localhost:8000/search', ...)
-```
-
-To:
-```javascript
-const API_URL = import.meta.env.VITE_API_URL;
-const response = await axios.get(`${API_URL}/search`, ...)
-```
-
----
-
-## Step-by-Step Deployment Commands
-
-### 1. Push to GitHub
-```bash
-git add .
-git commit -m "Ready for Vercel deployment"
-git push origin main
-```
-
-### 2. Vercel (Automatic)
-- Just push to GitHub, Vercel will auto-deploy
-- Or manually trigger in dashboard
-
-### 3. Backend (Railway Example)
-```bash
-# Navigate to your project
-cd ~/efcc-convictions-explorer
-
-# Railway CLI commands:
-railway up
-# Follow the prompts and deployment will start
-```
-
----
-
-## Verify Deployment
-
-After both frontend and backend are deployed:
-
-1. **Frontend**: Visit `https://your-project.vercel.app`
-2. **Backend**: Visit `https://your-api-url.com/`, should see {"message": "..."}
-3. **Check API Connection**: Open browser console, try a search
-4. **Monitor**: Use Vercel and Railway/Render dashboards to monitor logs
-
----
-
-## Environment Variables Summary
-
-### Frontend (.env.local in Frontend/)
-```
-VITE_API_URL=https://your-backend-api.com
-```
-
-### Backend (.env in root)
-```
-DATABASE_URL=your_database_url (if using database)
-ENVIRONMENT=production
-```
-
----
+Without `DATABASE_URL`, local development continues to use SQLite for developer data and the CSV for conviction data. With `DATABASE_URL`, the API reads both persisted developer state and conviction records from Neon.
 
 ## Troubleshooting
 
-**"Build failed in Vercel"**
-- Check build logs in Vercel dashboard
-- Ensure `cd Frontend && npm run build` completes locally
-- Check for Node version compatibility
-
-**"API connection errors"**
-- Verify VITE_API_URL is set correctly
-- Check backend is running (visit API URL directly)
-- Check CORS settings in FastAPI backend
-
-**"Build successful but page blank"**
-- Check browser console for errors
-- Verify API_URL environment variable is loaded
-- Check that React Router paths are correct
-
----
-
-## Quick Commands Reference
-
-```bash
-# Local development
-cd Frontend && npm run dev        # Frontend
-python main.py                    # Backend (separate terminal)
-
-# Build for production
-cd Frontend && npm run build
-
-# Deploy to Vercel
-git push origin main              # Auto-deploys if connected
-
-# Check deployment status
-vercel deploy --prod              # Via Vercel CLI
-```
-
----
-
-## Final Checklist
-
-- [ ] Code pushed to GitHub
-- [ ] Vercel project connected
-- [ ] Backend deployed (Railway/Render/Heroku)
-- [ ] VITE_API_URL environment variable set in Vercel
-- [ ] API endpoints updated in Frontend code
-- [ ] CORS enabled in FastAPI backend
-- [ ] Frontend builds successfully
-- [ ] API requests work from production
-- [ ] Custom domain configured (optional)
+- **API has no conviction records**: run the migration command against the intended Neon database and confirm it reports imported records.
+- **Database connection errors**: use Neon's pooled connection string, ensure SSL is enabled, and verify `DATABASE_URL` is set on the API Vercel project.
+- **Browser CORS errors**: set `FRONTEND_ORIGINS` to the exact frontend origin, including `https://` and without a trailing slash.
+- **Frontend does not reach the API**: confirm `VITE_API_URL` is the API project's origin and redeploy the frontend after changing it.
+- **Vercel function build errors**: confirm the API project root is `.` and has not inherited the Frontend project's `dist` output configuration.
 

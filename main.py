@@ -60,6 +60,18 @@ developer_platform = DeveloperPlatform()
 def load_conviction_data():
     """Load and process conviction data."""
     global convictions_data
+
+    if developer_platform.database_url:
+        try:
+            convictions_data = developer_platform.get_conviction_records()
+            if convictions_data:
+                logger.info("Loaded %s conviction records from Neon", len(convictions_data))
+            else:
+                logger.warning("No conviction records found in Neon; run migrate_neon.py")
+        except Exception as e:
+            logger.exception("Failed to load conviction data from Neon: %s", e)
+            convictions_data = []
+        return
     
     # Try to load from CSV file - check multiple locations
     possible_paths = [
