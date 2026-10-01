@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { Link } from "react-router-dom";
+import { Link, useLocation } from "react-router-dom";
 import { Check, Code, Copy, Menu, X } from "lucide-react";
 import { fetchDeveloperPlans } from "../lib/developerAuth";
 
@@ -77,12 +77,20 @@ const codeExamples = [
 ];
 
 const DeveloperPage = ({ isDark }) => {
+  const location = useLocation();
   const [activeSection, setActiveSection] = useState("overview");
   const [copiedCode, setCopiedCode] = useState(null);
   const [sidebarOpen, setSidebarOpen] = useState(false);
   const [plans, setPlans] = useState([]);
   const [plansLoading, setPlansLoading] = useState(false);
   const [plansError, setPlansError] = useState(null);
+
+  useEffect(() => {
+    const sectionId = location.hash.slice(1);
+    if (sections.some((section) => section.id === sectionId)) {
+      setActiveSection(sectionId);
+    }
+  }, [location.hash]);
 
   useEffect(() => {
     setPlansLoading(true);

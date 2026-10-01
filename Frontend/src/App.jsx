@@ -1,6 +1,6 @@
 
 import React, { useState, useEffect } from "react";
-import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
+import { BrowserRouter as Router, Routes, Route, Link, useNavigate } from "react-router-dom";
 import Navbar from "./components/Navbar";
 import HomePage from "./pages/HomePage";
 import SearchResultsPage from "./pages/SearchResultsPage";
@@ -17,6 +17,34 @@ import DisclaimerPage from "./pages/DisclaimerPage";
 import ContactPage from "./pages/ContactPage";
 import FAQPage from "./pages/FAQPage";
 import SupportPage from "./pages/SupportPage";
+
+function NotFoundPage({ isDark }) {
+  const navigate = useNavigate();
+  const textClass = isDark ? "text-white" : "text-gray-900";
+  const mutedClass = isDark ? "text-gray-400" : "text-gray-600";
+
+  return (
+    <section className="flex min-h-[60vh] items-center justify-center px-4 py-16 text-center">
+      <div className="max-w-lg">
+        <p className="mb-3 text-sm font-semibold uppercase tracking-wide text-blue-600">404 · Page not found</p>
+        <h1 className={`text-3xl font-bold ${textClass}`}>We couldn’t find that page.</h1>
+        <p className={`mt-3 ${mutedClass}`}>The address may have changed, or the page may no longer be available.</p>
+        <div className="mt-8 flex flex-wrap justify-center gap-3">
+          <button
+            type="button"
+            onClick={() => (window.history.length > 1 ? navigate(-1) : navigate("/"))}
+            className={`rounded-md border px-4 py-2 text-sm font-medium ${isDark ? "border-slate-600 text-gray-200 hover:bg-slate-800" : "border-gray-300 text-gray-700 hover:bg-gray-50"}`}
+          >
+            Go back
+          </button>
+          <Link to="/" className="rounded-md bg-blue-600 px-4 py-2 text-sm font-medium text-white hover:bg-blue-700">
+            Go to home
+          </Link>
+        </div>
+      </div>
+    </section>
+  );
+}
 
 function App() {
   const [isDark, setIsDark] = useState(false);
@@ -73,6 +101,7 @@ function App() {
             <Route path="/contact" element={<ContactPage isDark={isDark} />} />
             <Route path="/faq" element={<FAQPage isDark={isDark} />} />
             <Route path="/support" element={<SupportPage isDark={isDark} />} />
+            <Route path="*" element={<NotFoundPage isDark={isDark} />} />
           </Routes>
         </main>
         
@@ -83,33 +112,33 @@ function App() {
               <div>
                 <h3 className={`font-bold mb-4 ${isDark ? "text-white" : "text-gray-900"}`}>Product</h3>
                 <ul className={`space-y-2 text-sm ${isDark ? "text-gray-400" : "text-gray-700"}`}>
-                  <li><a href="/" className={`${isDark ? "hover:text-white" : "hover:text-gray-900"} transition`}>Features</a></li>
-                  <li><a href="/developers" className={`${isDark ? "hover:text-white" : "hover:text-gray-900"} transition`}>Developer Docs</a></li>
-                  <li><a href="/developers#pricing" className={`${isDark ? "hover:text-white" : "hover:text-gray-900"} transition`}>API Pricing</a></li>
+                  <li><Link to="/" className={`${isDark ? "hover:text-white" : "hover:text-gray-900"} transition`}>Features</Link></li>
+                  <li><Link to="/developers" className={`${isDark ? "hover:text-white" : "hover:text-gray-900"} transition`}>Developer Docs</Link></li>
+                  <li><Link to="/developers#pricing" className={`${isDark ? "hover:text-white" : "hover:text-gray-900"} transition`}>API Pricing</Link></li>
                 </ul>
               </div>
               <div>
                 <h3 className={`font-bold mb-4 ${isDark ? "text-white" : "text-gray-900"}`}>Company</h3>
                 <ul className={`space-y-2 text-sm ${isDark ? "text-gray-400" : "text-gray-600"}`}>
-                  <li><a href="/about" className={`${isDark ? "hover:text-white" : "hover:text-gray-900"} transition`}>About</a></li>
-                  <li><a href="/contact" className={`${isDark ? "hover:text-white" : "hover:text-gray-900"} transition`}>Contact</a></li>
-                  <li><a href="/support" className={`${isDark ? "hover:text-white" : "hover:text-gray-900"} transition`}>Support</a></li>
+                  <li><Link to="/about" className={`${isDark ? "hover:text-white" : "hover:text-gray-900"} transition`}>About</Link></li>
+                  <li><Link to="/contact" className={`${isDark ? "hover:text-white" : "hover:text-gray-900"} transition`}>Contact</Link></li>
+                  <li><Link to="/support" className={`${isDark ? "hover:text-white" : "hover:text-gray-900"} transition`}>Support</Link></li>
                 </ul>
               </div>
               <div>
                 <h3 className={`font-bold mb-4 ${isDark ? "text-white" : "text-gray-900"}`}>Legal</h3>
                 <ul className={`space-y-2 text-sm ${isDark ? "text-gray-400" : "text-gray-600"}`}>
-                  <li><a href="/privacy" className={`${isDark ? "hover:text-white" : "hover:text-gray-900"} transition`}>Privacy</a></li>
-                  <li><a href="/terms" className={`${isDark ? "hover:text-white" : "hover:text-gray-900"} transition`}>Terms</a></li>
-                  <li><a href="/disclaimer" className={`${isDark ? "hover:text-white" : "hover:text-gray-900"} transition`}>Disclaimer</a></li>
+                  <li><Link to="/privacy" className={`${isDark ? "hover:text-white" : "hover:text-gray-900"} transition`}>Privacy</Link></li>
+                  <li><Link to="/terms" className={`${isDark ? "hover:text-white" : "hover:text-gray-900"} transition`}>Terms</Link></li>
+                  <li><Link to="/disclaimer" className={`${isDark ? "hover:text-white" : "hover:text-gray-900"} transition`}>Disclaimer</Link></li>
                 </ul>
               </div>
               <div>
                 <h3 className={`font-bold mb-4 ${isDark ? "text-white" : "text-gray-900"}`}>Resources</h3>
                 <ul className={`space-y-2 text-sm ${isDark ? "text-gray-400" : "text-gray-600"}`}>
-                  <li><a href="/developers" className={`${isDark ? "hover:text-white" : "hover:text-gray-900"} transition`}>Developers</a></li>
-                  <li><a href="/support" className={`${isDark ? "hover:text-white" : "hover:text-gray-900"} transition`}>Support</a></li>
-                  <li><a href="/faq" className={`${isDark ? "hover:text-white" : "hover:text-gray-900"} transition`}>FAQ</a></li>
+                  <li><Link to="/developers" className={`${isDark ? "hover:text-white" : "hover:text-gray-900"} transition`}>Developers</Link></li>
+                  <li><Link to="/support" className={`${isDark ? "hover:text-white" : "hover:text-gray-900"} transition`}>Support</Link></li>
+                  <li><Link to="/faq" className={`${isDark ? "hover:text-white" : "hover:text-gray-900"} transition`}>FAQ</Link></li>
                 </ul>
               </div>
             </div>
