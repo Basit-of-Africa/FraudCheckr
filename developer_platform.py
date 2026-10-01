@@ -37,6 +37,10 @@ class PostgresConnection:
     def execute(self, query: str, parameters: Any = None):
         return self._connection.execute(query.replace("?", "%s"), parameters)
 
+    def executemany(self, query: str, parameters: Any):
+        cursor = self._connection.cursor()
+        return cursor.executemany(query.replace("?", "%s"), parameters)
+
     def executescript(self, script: str) -> None:
         script = script.replace(
             "INTEGER PRIMARY KEY AUTOINCREMENT",
@@ -289,8 +293,10 @@ class DeveloperPlatform:
             else:
                 insert_sql = "INSERT INTO conviction_records (record_json) VALUES (?)"
 
-            for record in records:
-                connection.execute(insert_sql, (json.dumps(record),))
+            connection.executemany(
+                insert_sql,
+                [(json.dumps(record),) for record in records],
+            )
 
     def _ensure_column(
         self,
