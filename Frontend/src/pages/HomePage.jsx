@@ -9,12 +9,6 @@ const HomePage = ({ isDark }) => {
     <div className={`min-h-screen transition-colors duration-300 ${isDark ? "bg-slate-950" : "bg-white"}`}>
       {/* Hero Section */}
       <div className="relative min-h-screen flex items-center justify-center px-4 py-20">
-        {/* Subtle background elements */}
-        <div className="absolute inset-0 overflow-hidden">
-          <div className={`absolute -top-40 right-0 w-80 h-80 rounded-full blur-3xl opacity-10 ${isDark ? "bg-blue-500" : "bg-blue-300"}`}></div>
-          <div className={`absolute -bottom-40 left-0 w-80 h-80 rounded-full blur-3xl opacity-10 ${isDark ? "bg-purple-500" : "bg-purple-300"}`}></div>
-        </div>
-
         <div className="relative max-w-4xl w-full z-10">
           <div className="text-center">
             <p className={`text-sm font-semibold uppercase tracking-widest mb-4 ${
