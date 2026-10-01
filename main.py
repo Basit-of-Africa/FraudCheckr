@@ -52,6 +52,14 @@ logging.basicConfig(
 )
 logger = logging.getLogger("fraudcheckr.api")
 
+
+def is_production_environment() -> bool:
+    return (
+        os.getenv("ENVIRONMENT", "").lower() == "production"
+        or os.getenv("VERCEL_ENV", "").lower() == "production"
+    )
+
+
 # Global dataset (loaded at startup)
 convictions_data: list[dict] = []
 developer_platform = DeveloperPlatform()
@@ -150,22 +158,23 @@ def normalize_origin(origin: str) -> str:
 # common localhost origins.
 allowed_origin_regex = r"https://.*\.(trycloudflare\.com|opentunnel\.dev)$"
 
-# Add production origins from environment variable
-if os.getenv("ENVIRONMENT") == "production":
+# Add the API deployment origin in production. The frontend is a separate
+# Vercel project, so its origin must be explicitly configured as well.
+if is_production_environment():
     vercel_url = os.getenv("VERCEL_URL")
     if vercel_url:
         allowed_origins.append(normalize_origin(vercel_url))
-    
-    # Add custom production domain
-    custom_domain = os.getenv("CUSTOM_DOMAIN")
-    if custom_domain:
-        allowed_origins.append(normalize_origin(custom_domain))
 
-    frontend_origins = os.getenv("FRONTEND_ORIGINS", "")
-    for origin in frontend_origins.split(","):
-        normalized_origin = normalize_origin(origin)
-        if normalized_origin:
-            allowed_origins.append(normalized_origin)
+# Add explicitly configured frontend origins in all environments. This is
+# needed because the frontend and API are deployed as separate Vercel projects.
+for origin in os.getenv("FRONTEND_ORIGINS", "").split(","):
+    normalized_origin = normalize_origin(origin)
+    if normalized_origin:
+        allowed_origins.append(normalized_origin)
+
+custom_domain = os.getenv("CUSTOM_DOMAIN")
+if custom_domain:
+    allowed_origins.append(normalize_origin(custom_domain))
 
 allowed_origins = list(dict.fromkeys(allowed_origins))
 
@@ -195,7 +204,7 @@ def is_secure_request(request: Request) -> bool:
 
 @app.middleware("http")
 async def enforce_security_headers_and_rate_limits(request: Request, call_next):
-    if os.getenv("ENVIRONMENT") == "production" and not is_secure_request(request):
+    if is_production_environment() and not is_secure_request(request):
         return JSONResponse(
             status_code=status.HTTP_400_BAD_REQUEST,
             content={"error": "HTTPS is required for production requests"},
@@ -1147,5 +1156,5 @@ if __name__ == "__main__":
         "main:app",
         host="0.0.0.0",
         port=int(os.getenv("PORT", "8000")),
-        reload=os.getenv("ENVIRONMENT") != "production",
+        reload=not is_production_environment(),
     )
