@@ -37,7 +37,7 @@ const ContactPage = ({ isDark }) => {
   };
 
   return (
-    <div className={`min-h-screen py-20 px-4 transition-colors ${isDark ? "bg-gradient-to-b from-slate-900 to-gray-900" : "bg-white"}`}>
+    <div className={`min-h-screen py-20 px-4 transition-colors ${isDark ? "bg-slate-900" : "bg-white"}`}>
       <div className="max-w-5xl mx-auto">
         {/* Header */}
         <div className="text-center mb-16">
@@ -190,7 +190,7 @@ const ContactPage = ({ isDark }) => {
                   {/* Submit */}
                   <button
                     type="submit"
-                    className="w-full px-6 py-3 bg-gradient-to-r from-blue-500 to-purple-600 text-white font-semibold rounded-lg hover:shadow-lg transition flex items-center justify-center gap-2"
+                    className="w-full px-6 py-3 bg-blue-600 text-white font-semibold rounded-lg hover:bg-blue-700 hover:shadow-lg transition flex items-center justify-center gap-2"
                   >
                     <Send className="w-4 h-4" />
                     Send Message

@@ -2,8 +2,8 @@ import React from "react";
 import { Target, Users, Shield, TrendingUp } from "lucide-react";
 
 const AboutPage = ({ isDark }) => {
-  const bgClass = isDark ? "bg-gradient-to-b from-slate-900 to-gray-900" : "bg-white";
-  const cardBgClass = isDark ? "from-slate-800 to-slate-900 border-slate-700" : "from-gray-50 to-white border-gray-200";
+  const bgClass = isDark ? "bg-slate-900" : "bg-white";
+  const cardBgClass = isDark ? "bg-slate-800 border-slate-700" : "bg-gray-50 border-gray-200";
   const textColorClass = isDark ? "text-white" : "text-gray-900";
   const textSecondaryClass = isDark ? "text-gray-400" : "text-gray-600";
   const headingClass = isDark ? "text-white" : "text-gray-900";
@@ -26,7 +26,7 @@ const AboutPage = ({ isDark }) => {
 
         {/* Mission & Vision */}
         <div className="grid md:grid-cols-2 gap-8 mb-20">
-          <div className={`bg-gradient-to-br ${cardBgClass} p-8 rounded-2xl border`}>
+          <div className={`p-8 rounded-2xl border ${cardBgClass}`}>
             <Target className="w-12 h-12 text-blue-500 mb-4" />
             <h2 className={`text-2xl font-bold ${headingClass} mb-4`}>Our Mission</h2>
             <p className={textSecondaryClass}>
@@ -34,7 +34,7 @@ const AboutPage = ({ isDark }) => {
             </p>
           </div>
 
-          <div className={`bg-gradient-to-br ${cardBgClass} p-8 rounded-2xl border`}>
+          <div className={`p-8 rounded-2xl border ${cardBgClass}`}>
             <TrendingUp className="w-12 h-12 text-purple-500 mb-4" />
             <h2 className={`text-2xl font-bold ${headingClass} mb-4`}>Our Vision</h2>
             <p className={textSecondaryClass}>
@@ -71,7 +71,7 @@ const AboutPage = ({ isDark }) => {
             ].map((feature, idx) => {
               const Icon = typeof feature.icon === "string" ? null : feature.icon;
               return (
-                <div key={idx} className={`bg-gradient-to-br ${cardBgClass} p-8 rounded-2xl border`}>
+                <div key={idx} className={`p-8 rounded-2xl border ${cardBgClass}`}>
                   {Icon ? (
                     <Icon className="w-10 h-10 text-blue-500 mb-4" />
                   ) : (
@@ -115,7 +115,7 @@ const AboutPage = ({ isDark }) => {
                 ]
               }
             ].map((item, idx) => (
-              <div key={idx} className={`bg-gradient-to-br ${cardBgClass} p-8 rounded-2xl border`}>
+              <div key={idx} className={`p-8 rounded-2xl border ${cardBgClass}`}>
                 <h3 className={`text-xl font-bold ${headingClass} mb-4`}>{item.org}</h3>
                 <ul className={`space-y-3 ${textSecondaryClass}`}>
                   {item.uses.map((use, i) => (
@@ -131,7 +131,7 @@ const AboutPage = ({ isDark }) => {
         </div>
 
         {/* Team/Organization */}
-        <div className={`bg-gradient-to-br ${cardBgClass} p-12 rounded-2xl border text-center mb-20`}>
+        <div className={`p-12 rounded-2xl border text-center mb-20 ${cardBgClass}`}>
           <Users className="w-16 h-16 mx-auto text-blue-500 mb-6" />
           <h2 className={`text-3xl font-bold ${headingClass} mb-4`}>Our Team</h2>
           <p className={`${textSecondaryClass} max-w-2xl mx-auto`}>
@@ -142,7 +142,7 @@ const AboutPage = ({ isDark }) => {
         {/* Data Sources */}
         <div className="mb-20">
           <h2 className={`text-4xl font-bold ${headingClass} text-center mb-12`}>Data & Sources</h2>
-          <div className={`bg-gradient-to-br ${cardBgClass} p-8 rounded-2xl border`}>
+          <div className={`p-8 rounded-2xl border ${cardBgClass}`}>
             <p className={`${textSecondaryClass} mb-6`}>
               All conviction records in FraudCheckr are sourced from:
             </p>
@@ -189,7 +189,7 @@ const AboutPage = ({ isDark }) => {
         </div>
 
         {/* CTA Section */}
-        <div className={`bg-gradient-to-r from-blue-600/20 to-purple-600/20 border ${isDark ? "border-blue-700/30" : "border-blue-300/30"} p-12 rounded-2xl text-center`}>
+        <div className={`bg-blue-600/20 border ${isDark ? "border-blue-700/30" : "border-blue-300/30"} p-12 rounded-2xl text-center`}>
           <h2 className={`text-3xl font-bold ${headingClass} mb-4`}>Ready to Explore?</h2>
           <p className={`${textSecondaryClass} mb-8 max-w-2xl mx-auto`}>
             Start searching public conviction records today. Our database contains over 864 verified cases across 33 Federal Courts.

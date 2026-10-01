@@ -76,7 +76,7 @@ function App() {
   };
 
   const bgClass = isDark 
-    ? "bg-gradient-to-b from-slate-900 via-slate-800 to-gray-900"
+    ? "bg-slate-900"
     : "bg-white";
 
   return (

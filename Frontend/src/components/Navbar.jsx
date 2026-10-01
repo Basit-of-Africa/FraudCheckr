@@ -24,7 +24,7 @@ const Navbar = ({ isDark, toggleTheme }) => {
         <div className="flex justify-between items-center h-14">
           {/* Logo */}
           <Link to="/" className="flex items-center gap-2 group">
-            <div className={`w-9 h-9 rounded flex items-center justify-center font-bold text-white ${isDark ? "bg-gradient-to-br from-blue-600 to-blue-700" : "bg-gradient-to-br from-blue-600 to-blue-700"} group-hover:shadow-lg group-hover:shadow-blue-500/30 transition-all duration-200`}>
+            <div className="w-9 h-9 rounded bg-blue-600 flex items-center justify-center font-bold text-white group-hover:shadow-lg group-hover:shadow-blue-500/30 transition-all duration-200">
               F
             </div>
             <span className={`font-semibold text-base tracking-tight ${isDark ? "text-white" : "text-gray-900"}`}>

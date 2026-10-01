@@ -8,7 +8,7 @@ const SupportPage = ({ isDark }) => {
   const borderClass = isDark ? "border-slate-700" : "border-gray-200";
 
   return (
-    <div className={`min-h-screen py-20 px-4 transition-colors ${isDark ? "bg-gradient-to-b from-slate-900 to-gray-900" : "bg-white"}`}>
+    <div className={`min-h-screen py-20 px-4 transition-colors ${isDark ? "bg-slate-900" : "bg-white"}`}>
       <div className="max-w-5xl mx-auto">
         {/* Header */}
         <div className="text-center mb-16">
@@ -201,7 +201,7 @@ const SupportPage = ({ isDark }) => {
           </p>
           <a
             href="/contact"
-            className="inline-block px-8 py-3 bg-gradient-to-r from-blue-500 to-purple-600 text-white font-semibold rounded-lg hover:shadow-lg transition"
+            className="inline-block px-8 py-3 bg-blue-600 text-white font-semibold rounded-lg hover:bg-blue-700 hover:shadow-lg transition"
           >
             Contact Support Team
           </a>

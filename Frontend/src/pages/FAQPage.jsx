@@ -152,7 +152,7 @@ const FAQPage = ({ isDark }) => {
   };
 
   return (
-    <div className={`min-h-screen py-20 px-4 transition-colors ${isDark ? "bg-gradient-to-b from-slate-900 to-gray-900" : "bg-white"}`}>
+    <div className={`min-h-screen py-20 px-4 transition-colors ${isDark ? "bg-slate-900" : "bg-white"}`}>
       <div className="max-w-4xl mx-auto">
         {/* Header */}
         <div className="text-center mb-16">

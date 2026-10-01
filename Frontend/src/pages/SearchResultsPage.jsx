@@ -40,7 +40,7 @@ const SearchResultsPage = ({ isDark }) => {
   }, [API_URL, query]);
 
   return (
-    <div className={`min-h-screen transition-colors py-12 px-4 ${isDark ? "bg-gradient-to-b from-slate-900 to-gray-900" : "bg-white"}`}>
+    <div className={`min-h-screen transition-colors py-12 px-4 ${isDark ? "bg-slate-900" : "bg-white"}`}>
       <div className="max-w-4xl mx-auto">
         {/* Header */}
         <div className="mb-12">

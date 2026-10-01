@@ -11,7 +11,7 @@ const StatCard = ({ title, value, isDark }) => {
       <p className={`text-sm font-semibold uppercase tracking-wider mb-3 ${isDark ? "text-gray-500" : "text-gray-600"}`}>
         {title}
       </p>
-      <p className={`text-4xl md:text-5xl font-bold bg-gradient-to-r from-blue-600 to-blue-500 bg-clip-text text-transparent`}>
+      <p className="text-4xl md:text-5xl font-bold text-blue-600">
         {value}
       </p>
     </div>

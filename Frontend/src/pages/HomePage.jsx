@@ -144,7 +144,7 @@ const HomePage = ({ isDark }) => {
               }
             ].map((item) => (
               <div key={item.step} className="text-center">
-                <div className="inline-flex items-center justify-center w-16 h-16 bg-gradient-to-br from-blue-500 to-purple-600 rounded-full mb-6">
+                <div className="inline-flex items-center justify-center w-16 h-16 bg-blue-600 rounded-full mb-6">
                   <span className="text-2xl font-bold text-white">{item.step}</span>
                 </div>
                 <h3 className={`text-xl font-bold mb-3 ${isDark ? "text-white" : "text-gray-900"}`}>{item.title}</h3>
@@ -156,7 +156,7 @@ const HomePage = ({ isDark }) => {
       </div>
 
       {/* Stats Section */}
-      <div className={`py-20 px-4 transition-colors ${isDark ? "bg-gradient-to-r from-blue-900/30 to-purple-900/30" : "bg-gray-50"}`}>
+      <div className={`py-20 px-4 transition-colors ${isDark ? "bg-blue-900/30" : "bg-gray-50"}`}>
         <div className="max-w-6xl mx-auto">
           <div className="grid md:grid-cols-4 gap-8">
             {[
@@ -166,7 +166,7 @@ const HomePage = ({ isDark }) => {
               { label: "Years Covered", value: "2020-2024" }
             ].map((stat, idx) => (
               <div key={idx} className="text-center">
-                <div className="text-4xl md:text-5xl font-bold bg-gradient-to-r from-blue-400 to-purple-500 bg-clip-text text-transparent mb-2">
+                <div className="text-4xl md:text-5xl font-bold text-blue-400 mb-2">
                   {stat.value}
                 </div>
                 <p className={isDark ? "text-gray-400" : "text-gray-600"}>{stat.label}</p>
@@ -186,7 +186,7 @@ const HomePage = ({ isDark }) => {
             Start exploring public conviction records today. Completely free and accessible to everyone.
           </p>
           <div className="flex flex-wrap justify-center gap-4">
-            <Link to="/search?name=" className="px-8 py-4 bg-gradient-to-r from-blue-500 to-purple-600 text-white font-semibold rounded-lg hover:shadow-lg hover:shadow-blue-500/50 transition-all transform hover:scale-105">
+            <Link to="/search?name=" className="px-8 py-4 bg-blue-600 text-white font-semibold rounded-lg hover:bg-blue-700 hover:shadow-lg hover:shadow-blue-500/50 transition-all transform hover:scale-105">
               Start Searching
             </Link>
             <Link to="/insights" className={`px-8 py-4 font-semibold rounded-lg border transition-all ${isDark ? "bg-slate-800 text-white border-slate-700 hover:border-gray-500" : "bg-white text-gray-900 border-gray-300 hover:border-gray-400 hover:shadow-md"}`}>
@@ -263,7 +263,7 @@ const HomePage = ({ isDark }) => {
                 uses: "Fraud studies and trend analysis"
               }
             ].map((item, idx) => (
-              <div key={idx} className={`p-8 rounded-lg border ${isDark ? "bg-gradient-to-br from-slate-800 to-slate-900 border-slate-700" : "bg-gray-50 border-gray-200"}`}>
+              <div key={idx} className={`p-8 rounded-lg border ${isDark ? "bg-slate-800 border-slate-700" : "bg-gray-50 border-gray-200"}`}>
                 <h3 className={`text-lg font-bold mb-2 ${isDark ? "text-white" : "text-gray-900"}`}>{item.org}</h3>
                 <p className={isDark ? "text-gray-400" : "text-gray-600"}>{item.uses}</p>
               </div>

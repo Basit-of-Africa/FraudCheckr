@@ -4,8 +4,8 @@ import { Code, CreditCard, FileText, Zap } from "lucide-react";
 const DocumentationPage = ({ isDark }) => {
   const [activeTab, setActiveTab] = useState("getting-started");
 
-  const bgClass = isDark ? "bg-gradient-to-b from-slate-900 to-gray-900" : "bg-white";
-  const cardBgClass = isDark ? "from-slate-800 to-slate-900 border-slate-700" : "from-gray-50 to-white border-gray-200";
+  const bgClass = isDark ? "bg-slate-900" : "bg-white";
+  const cardBgClass = isDark ? "bg-slate-800 border-slate-700" : "bg-gray-50 border-gray-200";
   const textSecondaryClass = isDark ? "text-gray-400" : "text-gray-600";
   const headingClass = isDark ? "text-white" : "text-gray-900";
   const codeBgClass = isDark ? "bg-gray-950" : "bg-gray-100";
@@ -58,7 +58,7 @@ const DocumentationPage = ({ isDark }) => {
 
             <div>
               <h3 className={`text-2xl font-bold ${headingClass} mb-4`}>Dataset Overview</h3>
-              <div className={`bg-gradient-to-br ${cardBgClass} p-6 rounded-xl border`}>
+              <div className={`p-6 rounded-xl border ${cardBgClass}`}>
                 <p className={textSecondaryClass}>
                   FraudCheckr organizes verified public fraud-conviction records from Nigeria&apos;s federal courts into a screening and research workflow.
                 </p>
@@ -107,7 +107,7 @@ const DocumentationPage = ({ isDark }) => {
                     description: "Get aggregate conviction statistics",
                   },
                 ].map((endpoint) => (
-                  <div key={endpoint.endpoint} className={`bg-gradient-to-br ${cardBgClass} p-6 rounded-xl border`}>
+                  <div key={endpoint.endpoint} className={`p-6 rounded-xl border ${cardBgClass}`}>
                     <div className="flex items-start gap-4">
                       <span className={`px-3 py-1 rounded text-white font-bold text-sm ${endpoint.method === "GET" ? "bg-blue-600" : "bg-green-600"}`}>
                         {endpoint.method}
@@ -126,7 +126,7 @@ const DocumentationPage = ({ isDark }) => {
 
             <div>
               <h3 className={`text-2xl font-bold ${headingClass} mb-4`}>Authentication</h3>
-              <div className={`bg-gradient-to-br ${cardBgClass} p-6 rounded-xl border`}>
+              <div className={`p-6 rounded-xl border ${cardBgClass}`}>
                 <p className={`${textSecondaryClass} mb-4`}>
                   FraudCheckr uses dashboard session tokens for account actions and live API keys for paid data requests.
                 </p>
@@ -144,7 +144,7 @@ X-API-Key: fchk_live_your_api_key`}
           <div className="space-y-8">
             <div>
               <h3 className={`text-2xl font-bold ${headingClass} mb-4`}>Web Search - Free</h3>
-              <div className={`bg-gradient-to-br ${cardBgClass} p-6 rounded-xl border border-green-500/40`}>
+              <div className={`p-6 rounded-xl border border-green-500/40 ${cardBgClass}`}>
                 <p className={textSecondaryClass}>
                   The public web experience remains free for search, browsing, and analytics.
                 </p>
@@ -161,7 +161,7 @@ X-API-Key: fchk_live_your_api_key`}
               <p className={`${textSecondaryClass} mb-6`}>
                 FraudCheckr currently offers a single paid developer plan managed through Paystack and the developer dashboard.
               </p>
-              <div className={`bg-gradient-to-br ${cardBgClass} p-6 rounded-xl border border-blue-500/40`}>
+              <div className={`p-6 rounded-xl border border-blue-500/40 ${cardBgClass}`}>
                 <h4 className={`text-xl font-bold ${headingClass} mb-2`}>Developer API Monthly</h4>
                 <p className={`text-sm ${textSecondaryClass} mb-4`}>
                   Access is enabled after Paystack payment and includes screening reports, search endpoints, report history, and API-key rotation.
@@ -180,7 +180,7 @@ X-API-Key: fchk_live_your_api_key`}
 
             <div>
               <h3 className={`text-2xl font-bold ${headingClass} mb-4`}>Billing Notes</h3>
-              <div className={`bg-gradient-to-br ${cardBgClass} p-6 rounded-xl border`}>
+              <div className={`p-6 rounded-xl border ${cardBgClass}`}>
                 <ul className={`space-y-3 ${textSecondaryClass}`}>
                   <li><strong className={headingClass}>Payment Methods:</strong> Paystack-supported card and bank payment methods</li>
                   <li><strong className={headingClass}>Billing Cycle:</strong> Monthly access window after successful payment</li>
@@ -312,11 +312,11 @@ async function searchConvictions(name) {
           })}
         </div>
 
-        <div className={`bg-gradient-to-br ${cardBgClass} p-8 rounded-2xl border`}>
+        <div className={`p-8 rounded-2xl border ${cardBgClass}`}>
           {renderContent()}
         </div>
 
-        <div className={`mt-20 bg-gradient-to-r from-blue-600/20 to-purple-600/20 border ${isDark ? "border-blue-700/30" : "border-blue-300/30"} p-12 rounded-2xl text-center`}>
+        <div className={`mt-20 bg-blue-600/20 border ${isDark ? "border-blue-700/30" : "border-blue-300/30"} p-12 rounded-2xl text-center`}>
           <h2 className={`text-3xl font-bold ${headingClass} mb-4`}>Need Help?</h2>
           <p className={`${textSecondaryClass} mb-8 max-w-2xl mx-auto`}>
             Check our FAQ, email support@fraudcheckr.com, or reach out to the team for onboarding support.
