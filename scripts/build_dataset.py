@@ -26,6 +26,7 @@ from __future__ import annotations
 
 import csv
 import io
+import json
 import re
 import sys
 from collections import Counter, defaultdict
@@ -891,6 +892,13 @@ def build():
             zone = {"HQ": "HEADQUARTERS", "HEADQUARTERS": "HEADQUARTERS", "ABUJAZC": "ABUJA", "PORTHARCOURT": "PORT HARCOURT"}.get(zone, clean(r[C_ZONE]))
             zone = "" if nullish(zone) else zone.title()
 
+            if len(names) > 1 and re.search(
+                r"\b(1ST|2ND|3RD|\d+TH|FIRST|SECOND|THIRD|FOURTH)\s+(?:AND\s+\w+\s+)?(DEFENDANTS?|ACCUSED|CONVICTS?)\b",
+                sentence["sentence"],
+            ):
+                # The outcome may differ between the defendants named in this row.
+                flags.append("sentence_names_specific_defendants")
+
             co_defs = [n for n, _ in names]
             for i, (name, aliases) in enumerate(names, start=1):
                 rec_flags = list(flags)
@@ -960,11 +968,24 @@ def build():
 # --------------------------------------------------------------------------- #
 
 
+ACTIONS_PATH = OUT_DIR / "record_actions.csv"
+
+
 def validate(records: list[dict]) -> list[str]:
     errors = []
     ids = [r["record_id"] for r in records]
     if len(ids) != len(set(ids)):
         errors.append("record_id values are not unique")
+    if ACTIONS_PATH.exists():
+        known = set(ids)
+        with ACTIONS_PATH.open(encoding="utf-8", newline="") as fh:
+            for row in csv.DictReader(fh):
+                if row["record_id"] not in known:
+                    errors.append(f"record_actions.csv refers to unknown record {row['record_id']} (IDs changed?)")
+                if row["action"] not in ("hide", "note"):
+                    errors.append(f"record_actions.csv: unknown action {row['action']!r} for {row['record_id']}")
+                if row["action"] == "note" and not row["note"].strip():
+                    errors.append(f"record_actions.csv: note action without note text for {row['record_id']}")
     for r in records:
         if not r["name"]:
             errors.append(f"{r['record_id']}: empty name")
@@ -1079,6 +1100,32 @@ def write_report(records, excluded, prefix_courts, date_log, source_rows: int) -
     return "\n".join(lines)
 
 
+FACTS_PATH = ROOT / "Frontend" / "src" / "lib" / "datasetFacts.json"
+
+
+def dataset_facts(records: list[dict]) -> str:
+    """Headline figures for the website, so public copy always matches the data served."""
+    hidden = set()
+    if ACTIONS_PATH.exists():
+        with ACTIONS_PATH.open(encoding="utf-8", newline="") as fh:
+            hidden = {row["record_id"] for row in csv.DictReader(fh) if row["action"] == "hide"}
+    records = [r for r in records if r["record_id"] not in hidden]
+    tables = sorted({int(r["source_table"][-4:]) for r in records})
+    states = {r["court_state"] for r in records if r["court_state"]}
+    facts = {
+        "records": len(records),
+        "firstTableYear": tables[0],
+        "lastTableYear": tables[-1],
+        "courts": len({r["court"] for r in records if r["court_type"]}),
+        "states": len(states - {"FCT"}),
+        "includesFct": "FCT" in states,
+        "efccZones": len({r["efcc_zone"] for r in records if r["efcc_zone"]}),
+        "offenceCategories": len({r["offence_category"] for r in records} - {"Other", "Not stated"}),
+        "withChargeNumberPct": round(100 * sum(1 for r in records if r["charge_number"]) / len(records)),
+    }
+    return json.dumps(facts, indent=2) + "\n"
+
+
 def _csv_text(rows: list[dict], fieldnames: list[str]) -> str:
     buffer = io.StringIO()
     writer = csv.DictWriter(buffer, fieldnames=fieldnames, lineterminator="\n")
@@ -1105,6 +1152,7 @@ def main() -> int:
             excluded, ["source_table", "source_serial", "source_file", "reason", "name_as_recorded"]
         ),
         OUT_DIR / "QUALITY_REPORT.md": write_report(records, excluded, prefix_courts, date_log, source_rows),
+        FACTS_PATH: dataset_facts(records),
     }
 
     if check_only:

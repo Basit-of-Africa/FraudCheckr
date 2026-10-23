@@ -56,7 +56,7 @@ Complete documentation of the data structure used in EFCC Convictions Explorer.
 Raw CSV data from EFCC official records
 
 ### After Processing
-All data processed through `data_cleaning.py`:
+All data is processed by `scripts/build_dataset.py` (see `data/README.md` for the full method):
 
 1. **Text Normalization**
    - All text converted to UPPERCASE
@@ -113,7 +113,7 @@ JANE SMITH,MONEY LAUNDERING,10 YEARS,120,10000000,,SUPREME COURT
 
 ```json
 {
-  "total_cases": 7788,
+  "total_cases": 7876,
   "most_common_offense": "CYBERCRIME",
   "average_prison_term_months": 45.2,
   "unique_courts": 33,
@@ -124,16 +124,15 @@ JANE SMITH,MONEY LAUNDERING,10 YEARS,120,10000000,,SUPREME COURT
 ## Dataset Statistics
 
 ### By the Numbers
-- **Total Records**: 7,788 conviction records
-- **Coverage Period**: 2020-2024 (complete EFCC federal court convictions)
-- **Unique Courts**: 33+ federal courts
-- **Unique Offenses**: 50+ offense categories
-- **Data Source**: EFCC official conviction records merged from 2020-2024
+The authoritative field list, methodology and quality flags are in [`data/README.md`](../../data/README.md);
+current counts are in [`data/QUALITY_REPORT.md`](../../data/QUALITY_REPORT.md).
+
+- **Source**: EFCC *Narrative of Convictions* tables, 2020–2024
+- **Courts**: Federal, State and FCT High Courts
 
 ### Data Updates
-- Last processed: 2020-2024 EFCC conviction database
-- Records cover federal high courts across Nigeria
-- Multiple defendants are split into separate records for analysis
+- Rebuilt by `scripts/build_dataset.py` from `data/source/`
+- Multiple defendants are split into separate records, with co-defendants listed
 
 ## Data Quality
 

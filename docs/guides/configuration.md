@@ -141,35 +141,17 @@ export default {
 
 ### CSV File Location
 
-By default, the API looks for:
-1. `./efcc_convictions.csv`
-2. `{script_dir}/efcc_convictions.csv`
-3. `{cwd}/efcc_convictions.csv`
+The API loads `data/convictions.csv` (built by `scripts/build_dataset.py`). To load a different file, set the
+`CONVICTIONS_CSV` environment variable. When `DATABASE_URL` is set, records are read from Neon instead.
 
-To use a custom location, edit `main.py`:
-
-```python
-CUSTOM_DATA_PATH = '/path/to/custom_data.csv'
-
-def load_conviction_data():
-    df = pd.read_csv(CUSTOM_DATA_PATH)
-    # ... rest of loading logic
-```
-
-### Data Transformation
-
-Run data cleaning:
+### Rebuilding the dataset
 
 ```bash
-python transform_data.py
+python scripts/build_dataset.py          # rebuild data/convictions.csv
+python scripts/build_dataset.py --check  # verify committed files match a fresh build
 ```
 
-Configure output filename in `transform_data.py`:
-
-```python
-OUTPUT_FILE = 'efcc_convictions_custom.csv'
-output_df.to_csv(OUTPUT_FILE, index=False)
-```
+See `data/README.md` for the method and field definitions.
 
 ## CORS Configuration
 

@@ -415,13 +415,21 @@ def build_screening_report(
 
     if exact_matches > 0 or highest_confidence >= 0.95:
         status_value = "match"
-        summary_text = "Strong conviction match found. Escalate this person for compliance review before approval."
+        summary_text = (
+            "A record with the same name was found. A name match does not show that the record is about this person; "
+            "confirm the charge number, court and date with the court before relying on it."
+        )
     elif ranked_matches:
         status_value = "review"
-        summary_text = "Possible conviction match found. Manual review is recommended before making a decision."
+        summary_text = (
+            "Records with similar names were found. These are leads for manual review only and may be about other people."
+        )
     else:
         status_value = "clear"
-        summary_text = "No meaningful conviction match found in the current FraudCheckr dataset."
+        summary_text = (
+            "No matching name was found in the FraudCheckr dataset (EFCC conviction tables). "
+            "This is not evidence that the person has no conviction."
+        )
 
     return {
         "status": status_value,

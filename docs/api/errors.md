@@ -50,13 +50,13 @@ Error codes and handling strategies for Nigeria's Fraud Conviction Records API.
 ```
 
 **Cause**: CSV file not found or failed to load  
-**Solution**: Ensure `efcc_convictions.csv` exists in project root
+**Solution**: Ensure `data/convictions.csv` exists in project root
 
 ### Invalid Offset
 
 ```json
 {
-  "error": "Offset 1000 exceeds total records 864"
+  "error": "Offset 1000 exceeds total records 7876"
 }
 ```
 

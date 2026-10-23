@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import { Code, CreditCard, FileText, Zap } from "lucide-react";
+import { FACTS } from "../lib/facts";
 
 const DocumentationPage = ({ isDark }) => {
   const [activeTab, setActiveTab] = useState("getting-started");
@@ -60,14 +61,14 @@ const DocumentationPage = ({ isDark }) => {
               <h3 className={`text-2xl font-bold ${headingClass} mb-4`}>Dataset Overview</h3>
               <div className={`p-6 rounded-xl border ${cardBgClass}`}>
                 <p className={textSecondaryClass}>
-                  FraudCheckr organizes verified public fraud-conviction records from Nigeria&apos;s federal courts into a screening and research workflow.
+                  FraudCheckr organises the conviction records published by the EFCC (Narrative of Convictions, {FACTS.yearsLabel}) into a searchable research dataset.
                 </p>
                 <ul className={`mt-4 space-y-2 ${textSecondaryClass}`}>
-                  <li>✓ 7,788 total conviction records</li>
-                  <li>✓ 33 Federal High Courts covered</li>
-                  <li>✓ 192 distinct offense types</li>
-                  <li>✓ Structured sentencing, fine, and restitution fields</li>
-                  <li>✓ Developer screening reports for KYC and compliance review</li>
+                  <li>✓ {FACTS.recordsLabel} conviction records, one per defendant</li>
+                  <li>✓ {FACTS.courts} Federal, State and FCT High Courts in {FACTS.placesLabel}</li>
+                  <li>✓ {FACTS.offenceCategories} offence categories</li>
+                  <li>✓ Charge numbers, conviction dates and original sentence text</li>
+                  <li>✓ Per-record quality flags</li>
                 </ul>
               </div>
             </div>

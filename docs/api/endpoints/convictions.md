@@ -36,7 +36,7 @@ curl "http://localhost:8000/convictions?limit=100&offset=500"
 
 ```json
 {
-  "total": 864,
+  "total": 7876,
   "limit": 10,
   "offset": 0,
   "data": [
@@ -81,12 +81,12 @@ curl "http://localhost:8000/convictions?limit=100&offset=500"
 ```
 
 **Cause**: CSV file not found or failed to load.  
-**Solution**: Ensure `efcc_convictions.csv` exists in project root.
+**Solution**: Ensure `data/convictions.csv` exists in project root.
 
 ### 400 - Invalid Offset
 ```json
 {
-  "error": "Offset 1000 exceeds total records 864"
+  "error": "Offset 1000 exceeds total records 7876"
 }
 ```
 

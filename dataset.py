@@ -15,6 +15,10 @@ from typing import Any
 
 CANONICAL_PATH = Path(__file__).resolve().parent / "data" / "convictions.csv"
 
+# Editorial decisions on individual records: hide (e.g. under review after a
+# correction request) or attach a note. See data/README.md, "Record actions".
+ACTIONS_PATH = Path(__file__).resolve().parent / "data" / "record_actions.csv"
+
 
 def _prison_term_label(custodial_months: str, community_service: str, sentence: str) -> str:
     if custodial_months:
@@ -64,9 +68,30 @@ def to_api_record(row: dict[str, str]) -> dict[str, Any]:
         "source_table": row.get("source_table") or None,
         "source_serial": row.get("source_serial") or None,
         "quality_flags": [f for f in (row.get("quality_flags") or "").split(";") if f],
+        "editor_note": None,
     }
 
 
-def load_canonical_records(path: Path = CANONICAL_PATH) -> list[dict[str, Any]]:
+def load_record_actions(path: Path = ACTIONS_PATH) -> dict[str, dict[str, str]]:
+    if not path.exists():
+        return {}
     with path.open(encoding="utf-8", newline="") as handle:
-        return [to_api_record(row) for row in csv.DictReader(handle)]
+        return {row["record_id"]: row for row in csv.DictReader(handle)}
+
+
+def load_canonical_records(
+    path: Path = CANONICAL_PATH, actions_path: Path = ACTIONS_PATH
+) -> list[dict[str, Any]]:
+    """Load published records: hidden records are left out, notes are attached."""
+    actions = load_record_actions(actions_path)
+    records = []
+    with path.open(encoding="utf-8", newline="") as handle:
+        for row in csv.DictReader(handle):
+            action = actions.get(row["record_id"])
+            if action and action["action"] == "hide":
+                continue
+            record = to_api_record(row)
+            if action and action["action"] == "note":
+                record["editor_note"] = action["note"]
+            records.append(record)
+    return records

@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import { HelpCircle, ChevronDown } from "lucide-react";
+import { FACTS, OPERATORS } from "../lib/facts";
 
 const FAQPage = ({ isDark }) => {
   const [activeIndex, setActiveIndex] = useState(null);
@@ -15,15 +16,15 @@ const FAQPage = ({ isDark }) => {
       questions: [
         {
           q: "What is FraudCheckr?",
-          a: "FraudCheckr is a web platform that provides searchable access to publicly available fraud conviction records from Nigeria's Federal High Courts. Our database contains over 7,788 verified conviction records spanning 2020-2024."
+          a: `FraudCheckr makes the fraud conviction records published by Nigeria's Economic and Financial Crimes Commission (EFCC) searchable. It holds ${FACTS.recordsLabel} records from the EFCC's Narrative of Convictions tables for ${FACTS.yearsLabel}. It is run by ${OPERATORS} and is not affiliated with the EFCC or any court.`
         },
         {
           q: "Is FraudCheckr free to use?",
-          a: "Yes! The web search interface is completely free for all users. You can search, filter, and view conviction records at no cost. We also offer paid API access for developers and organizations needing programmatic access."
+          a: "Yes. Searching and browsing records and statistics is free and needs no account. A paid API is available for organisations that need programmatic access; see the Developers page."
         },
         {
           q: "How do I search for records?",
-          a: "Simply enter a defendant's name in the search bar and click 'Search'. FraudCheckr supports partial matches and is case-insensitive. You can also use our Insights page to view statistics and filter by offense type or court."
+          a: "Type a name into the search bar. Partial names and recorded aliases are matched, and capitalisation does not matter. The Insights page shows patterns across all records."
         }
       ]
     },
@@ -31,54 +32,58 @@ const FAQPage = ({ isDark }) => {
       category: "Data & Accuracy",
       questions: [
         {
-          q: "How accurate is your data?",
-          a: "All conviction records are sourced from official Federal High Court proceedings and public records. While we strive for 100% accuracy, we recommend verifying critical information with official court sources before making important decisions."
+          q: "Where does the data come from?",
+          a: `Only from the EFCC's Narrative of Convictions tables for ${FACTS.yearsLabel}, which list convictions the EFCC secured in Federal, State and FCT High Courts. We do not add records from other sources.`
         },
         {
-          q: "What years does the data cover?",
-          a: "Our database currently covers fraud convictions from Nigeria's federal courts spanning 2020-2024. We continuously update our records as new cases are finalized. For historical records before 2020, please contact the relevant federal courts directly."
+          q: "How accurate is the data?",
+          a: "Records are as accurate as the EFCC's tables. We fix problems introduced when the tables were extracted from PDFs, such as swapped columns and misread dates, and we flag anything we could not resolve. We have not checked each record against court files, and a record does not show whether a conviction was later overturned on appeal. Confirm important details with the court registry."
         },
         {
-          q: "Can I download all the data?",
-          a: "The CSV file is available for download from our GitHub repository. For bulk data access or custom exports via API, please check our API pricing page or contact support."
+          q: "Does a matching name mean someone was convicted?",
+          a: "No. Many people share names. A record shows that the EFCC reported a conviction of someone with that name. To link it to a particular person, match the charge number, court and date with the court registry."
+        },
+        {
+          q: "If I find no record, does that mean a person has no conviction?",
+          a: `No. FraudCheckr only covers convictions listed in the EFCC's tables for ${FACTS.yearsLabel}. It does not cover other agencies, other years, or cases the EFCC did not list.`
         },
         {
           q: "How often is the data updated?",
-          a: "We update our database regularly as new convictions are recorded. Major updates occur monthly, though there may be delays in official data release. Critical updates are noted in our changelog."
+          a: "We add each new EFCC table after it is published. The EFCC publishes these tables periodically, so recent convictions may not appear yet."
         }
       ]
     },
     {
-      category: "Privacy & Security",
+      category: "Privacy",
       questions: [
         {
-          q: "Is my search history private?",
-          a: "Yes. We don't store personal search histories or track individual users across sessions. Your IP address is logged for security purposes only. See our Privacy Policy for details."
+          q: "Do you keep a record of my searches?",
+          a: "You do not need an account to search. Like most websites, our hosting provider keeps short-term technical logs, including IP addresses and the pages requested (which can include search terms), for security and troubleshooting. The Privacy Policy explains what we keep and for how long."
         },
         {
-          q: "Is the data I search on FraudCheckr secure?",
-          a: "Absolutely. All data transmission is encrypted via HTTPS. We don't store personal information from searches, and our servers are protected by industry-standard security measures."
+          q: "Do you use cookies or tracking?",
+          a: "No. We do not use advertising or analytics trackers. Your browser stores your light/dark theme choice, and, if you use the developer dashboard, your sign-in session."
         },
         {
-          q: "Can I be identified on FraudCheckr?",
-          a: "No. Searches on FraudCheckr are anonymous. We don't require registration or login for public access. Paid API users do provide credentials, which are securely stored."
+          q: "Why do you publish people's names?",
+          a: "Conviction records are published by the EFCC as a matter of public accountability, and names are what make them searchable. We limit what we publish to what that purpose needs: we leave out victims' names, where a convict is held and their expected release date."
         }
       ]
     },
     {
-      category: "Legal Use & Responsible Access",
+      category: "Responsible Use",
       questions: [
-        {
-          q: "Is it legal to use this data?",
-          a: "Yes. All conviction records are public information from official court proceedings. However, you must use this data responsibly and legally. Prohibited uses include harassment, discrimination, or unauthorized background checks for discriminatory purposes."
-        },
         {
           q: "Can I use this for background checks?",
-          a: "FraudCheckr is intended for research, journalism, compliance, and legitimate business purposes. Employment background checks should follow legal guidelines (FCRA in the US). Always get consent and follow local employment laws."
+          a: "FraudCheckr is a research tool, not a background-check service. Do not make decisions about a person, such as hiring, lending or tenancy, based on a FraudCheckr record alone. If a record seems relevant, confirm it with the court and give the person a chance to respond."
         },
         {
           q: "What if I find information about myself?",
-          a: "If you believe information is inaccurate or needs updating, please reach out to us or contact the relevant federal court. We take data accuracy seriously and will investigate disputes."
+          a: "Contact us with the record ID shown on the record. We will review your request and correct, add context to, or remove the record where that is warranted, for example if it is wrong, is not about you but is being confused with you, or the conviction was overturned. The Disclaimer page explains the process."
+        },
+        {
+          q: "What uses are not allowed?",
+          a: "Harassment, threats, discrimination, publishing records out of context to shame someone, and any use that breaks the law. See the Terms of Service."
         }
       ]
     },
@@ -87,61 +92,44 @@ const FAQPage = ({ isDark }) => {
       questions: [
         {
           q: "How do I get API access?",
-          a: "Create a developer account, complete Paystack checkout, and then rotate your live API key from the developer dashboard. FraudCheckr currently offers a single paid developer plan for screening and conviction-search access."
+          a: "Create a developer account on the Developers page, choose a plan and pay through Paystack, then create an API key from your dashboard."
         },
         {
-          q: "What are the rate limits?",
-          a: "Paid API keys are protected by platform rate limits and abuse controls. If you exceed the current request threshold, FraudCheckr temporarily throttles requests and returns a rate-limit response so your integration can retry safely."
+          q: "What plans are available?",
+          a: "Current plans, prices and limits are listed on the Developers page."
         },
         {
-          q: "Can I use the API commercially?",
-          a: "Yes. Paid API subscriptions can be used for commercial purposes. Please review our Terms of Service for usage guidelines and restrictions."
+          q: "Are there rate limits?",
+          a: "Yes. Each API key has a per-minute request limit. If you exceed it, the API returns a rate-limit response telling you when to retry."
         },
         {
-          q: "What programming languages are supported?",
-          a: "Our REST API works with any language that can make HTTP requests (Python, JavaScript, Java, PHP, Go, Ruby, etc.). We provide code examples in Python and JavaScript."
+          q: "What languages does the API support?",
+          a: "It is a REST API, so any language that can make HTTP requests works. The documentation includes examples."
         }
       ]
     },
     {
-      category: "Support & Troubleshooting",
+      category: "Support & Billing",
       questions: [
         {
-          q: "How do I contact support?",
-          a: "You can reach us via email (support@fraudcheckr.com), phone (+234-800-000-0000), or our contact form. We respond within 24-48 hours."
+          q: "How do I contact you?",
+          a: "Use the details on the Contact page."
         },
         {
           q: "The search returned no results. Why?",
-          a: "Possible reasons: 1) The name might not be exact, 2) The defendant's record may not be in our database, 3) Check spelling and try partial names. Visit our search tips for more help."
+          a: "The name may be spelled differently in the EFCC's tables, or the person may not be in them. Try a surname on its own or another spelling."
         },
         {
-          q: "I'm getting an API error. What should I do?",
-          a: "Check the API documentation for error codes. Common issues: invalid API key, rate limit exceeded, malformed request. Email api@fraudcheckr.com with error details for assistance."
+          q: "How do I pay?",
+          a: "Payments are processed by Paystack. The payment methods available to you are shown at checkout."
         },
         {
-          q: "Is the site down? Why can't I access it?",
-          a: "Check your internet connection first. You can also check our status page (status.fraudcheckr.com) for live updates. Contact support if the issue persists."
-        }
-      ]
-    },
-    {
-      category: "Pricing & Billing",
-      questions: [
-        {
-          q: "What payment methods do you accept?",
-          a: "We accept major credit cards (Visa, Mastercard, Amex), bank transfers, and mobile money platforms (MTN, Airtel, GLO). Details are available at checkout."
+          q: "Can I cancel my subscription?",
+          a: "Yes. You keep access until the end of the period you have paid for."
         },
         {
           q: "Do you offer refunds?",
-          a: "Refunds are reviewed case by case. If you believe you were billed incorrectly or the service was materially unavailable, contact billing support so we can investigate."
-        },
-        {
-          q: "Can I cancel my subscription anytime?",
-          a: "Yes! You can cancel anytime. There's no lock-in contract. You'll retain access until the end of your billing period."
-        },
-        {
-          q: "Is there a free trial for API access?",
-          a: "FraudCheckr does not currently advertise a public API free trial. If you need an evaluation workflow for your team, contact sales support before subscribing."
+          a: "If you were billed incorrectly or the service was unavailable for a significant part of your billing period, contact us and we will review it."
         }
       ]
     }

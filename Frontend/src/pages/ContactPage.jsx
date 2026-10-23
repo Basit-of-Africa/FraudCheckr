@@ -27,13 +27,13 @@ const ContactPage = ({ isDark }) => {
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    // In a real app, this would send to a backend
-    console.log("Form submitted:", formData);
+    // There is no message backend yet, so hand the message to the visitor's
+    // email app rather than pretending it was sent.
+    const body = `${formData.message}\n\n— ${formData.name} (${formData.email})`;
+    window.location.href =
+      `mailto:support@fraudcheckr.com?subject=${encodeURIComponent(formData.subject || "FraudCheckr enquiry")}` +
+      `&body=${encodeURIComponent(body)}`;
     setSubmitted(true);
-    setTimeout(() => {
-      setFormData({ name: "", email: "", subject: "", message: "" });
-      setSubmitted(false);
-    }, 3000);
   };
 
   return (
@@ -115,10 +115,10 @@ const ContactPage = ({ isDark }) => {
                 <div className="p-8 text-center bg-green-500/10 border border-green-500 rounded-lg">
                   <MessageSquare className="w-12 h-12 text-green-500 mx-auto mb-4" />
                   <p className={`${headingClass} font-semibold mb-2`}>
-                    Thank you for reaching out!
+                    Your email app should now open
                   </p>
                   <p className={textSecondaryClass}>
-                    We'll get back to you as soon as possible.
+                    Your message is ready to send from there. If nothing opened, email support@fraudcheckr.com directly.
                   </p>
                 </div>
               ) : (
@@ -193,7 +193,7 @@ const ContactPage = ({ isDark }) => {
                     className="w-full px-6 py-3 bg-blue-600 text-white font-semibold rounded-lg hover:bg-blue-700 hover:shadow-lg transition flex items-center justify-center gap-2"
                   >
                     <Send className="w-4 h-4" />
-                    Send Message
+                    Open in my email app
                   </button>
                 </form>
               )}

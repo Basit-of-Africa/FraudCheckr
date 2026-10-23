@@ -98,19 +98,15 @@ npm list react vite
 The platform includes sample data:
 
 ```
-efcc_convictions.csv        # 864 processed conviction records
-efcc_convictions_raw.csv    # Raw data (943 records)
-sample_efcc_convictions.csv # Smaller sample dataset
+data/convictions.csv        # canonical dataset (built by scripts/build_dataset.py)
+data/source/                # EFCC source tables (2020 to 2024)
 ```
 
-To use your own data:
+To rebuild the dataset after changing the EFCC source tables in `data/source/`:
 
-1. Prepare CSV with columns: `name`, `offense`, `prison_term`, `fine`, `restitution`, `court`
-2. Place file as `efcc_convictions.csv` in project root
-3. Run transformation script:
-   ```bash
-   python transform_data.py
-   ```
+```bash
+python scripts/build_dataset.py
+```
 
 ## Post-Installation
 

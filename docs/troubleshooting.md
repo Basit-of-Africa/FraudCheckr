@@ -63,12 +63,12 @@ pip install -r requirements.txt
 
 1. Ensure CSV file exists:
 ```bash
-ls efcc_convictions.csv
+ls data/convictions.csv
 ```
 
 2. File should be in project root:
 ```
-c:\Users\USER\efcc-convictions-explorer\efcc_convictions.csv
+c:\Users\USER\efcc-convictions-explorer\data/convictions.csv
 ```
 
 3. Check file permissions - file must be readable
@@ -101,7 +101,7 @@ ValidationError: Input should be a valid string
 **Solution:**
 This usually means NaN values from CSV. Run:
 ```bash
-python transform_data.py
+python scripts/build_dataset.py
 ```
 
 ## Frontend Issues
@@ -266,7 +266,7 @@ name, offense, prison_term, fine, restitution, court
 
 2. Run transformation:
 ```bash
-python transform_data.py
+python scripts/build_dataset.py
 ```
 
 3. Check transform output for record count
@@ -278,12 +278,12 @@ python transform_data.py
 1. Verify CSV file has data rows (not just headers)
 2. Check data file size:
 ```bash
-ls -lh efcc_convictions.csv
+ls -lh data/convictions.csv
 ```
 
 3. Preview data:
 ```bash
-head -5 efcc_convictions.csv
+head -5 data/convictions.csv
 ```
 
 ## Testing Issues
