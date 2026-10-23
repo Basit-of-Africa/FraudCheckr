@@ -24,12 +24,12 @@ The root `vercel.json` configures the Python function bundle. The frontend proje
    .\venv\Scripts\python.exe migrate_neon.py
    ```
 
-   The importer creates the application tables, copies records from `developer_platform.db` when that file exists, and processes `efcc_convictions_updated.csv` into the Neon `conviction_records` table. It refuses to run if the target tables already contain data; do not use it as a routine deploy command.
+   The importer creates the application tables, copies records from `developer_platform.db` when that file exists, and loads `data/convictions.csv` into the Neon `conviction_records` table. It refuses to run if the target tables already contain data; do not use it as a routine deploy command. To refresh conviction records after rebuilding the dataset, use `--convictions-only` (see below).
 
    Optional source overrides:
 
    ```powershell
-   .\venv\Scripts\python.exe migrate_neon.py --sqlite-path .\developer_platform.db --csv-path .\efcc_convictions_updated.csv
+   .\venv\Scripts\python.exe migrate_neon.py --sqlite-path .\developer_platform.db
    ```
 
 3. **Create the API Vercel project**
@@ -62,7 +62,16 @@ The root `vercel.json` configures the Python function bundle. The frontend proje
 
 ## Data Migration Caveat
 
-This repository's application code used SQLite for developer accounts and did not use Railway PostgreSQL, despite the old deployment guide mentioning it. The importer can copy the local `developer_platform.db` file in this checkout. If Railway had a separate persistent volume or database containing newer account, subscription, or report data, export that data separately and reconcile it before cutover; this script cannot access Railway's filesystem. Conviction records are imported from the checked-in CSV.
+This repository's application code used SQLite for developer accounts and did not use Railway PostgreSQL, despite the old deployment guide mentioning it. The importer can copy the local `developer_platform.db` file in this checkout. If Railway had a separate persistent volume or database containing newer account, subscription, or report data, export that data separately and reconcile it before cutover; this script cannot access Railway's filesystem. Conviction records are imported from the checked-in `data/convictions.csv`.
+
+### Refreshing conviction records
+
+After `python scripts/build_dataset.py` produces a new `data/convictions.csv`, replace the records in Neon without touching developer accounts:
+
+```powershell
+$env:DATABASE_URL = "<Neon pooled connection string>"
+.\venv\Scripts\python.exe migrate_neon.py --convictions-only
+```
 
 ## Local Checks
 

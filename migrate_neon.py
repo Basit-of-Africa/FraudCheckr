@@ -1,13 +1,18 @@
-"""Copy the existing SQLite developer data and CSV corpus into Neon once."""
+"""Copy the existing SQLite developer data and the canonical convictions dataset into Neon.
+
+First-time setup (empty Neon database):
+    DATABASE_URL=... python migrate_neon.py
+
+Refresh conviction records only, after rebuilding data/convictions.csv:
+    DATABASE_URL=... python migrate_neon.py --convictions-only
+"""
 
 import argparse
 import os
 import sqlite3
 from pathlib import Path
 
-import pandas as pd
-
-from data_cleaning import process_efcc_data
+from dataset import CANONICAL_PATH, load_canonical_records
 from developer_platform import DeveloperPlatform
 
 
@@ -89,9 +94,6 @@ def migrate_developer_data(source_path: Path, platform: DeveloperPlatform) -> in
         source.close()
 
 
-def load_processed_records(csv_path: Path) -> list[dict]:
-    frame = pd.read_csv(csv_path, engine="python")
-    return process_efcc_data(frame.to_dict(orient="records"))
 
 
 def main() -> None:
@@ -105,7 +107,12 @@ def main() -> None:
     parser.add_argument(
         "--csv-path",
         type=Path,
-        default=project_root / "efcc_convictions_updated.csv",
+        default=CANONICAL_PATH,
+    )
+    parser.add_argument(
+        "--convictions-only",
+        action="store_true",
+        help="Replace conviction records only; leave developer accounts untouched",
     )
     arguments = parser.parse_args()
 
@@ -117,14 +124,19 @@ def main() -> None:
 
     platform = DeveloperPlatform(database_url=database_url)
     platform.initialize()
-    ensure_target_is_empty(platform)
+    conviction_records = load_canonical_records(arguments.csv_path)
 
+    if arguments.convictions_only:
+        platform.replace_conviction_records(conviction_records)
+        print(f"Replaced conviction records: {len(conviction_records)} imported from {arguments.csv_path}")
+        return
+
+    ensure_target_is_empty(platform)
     developer_rows = migrate_developer_data(arguments.sqlite_path, platform)
-    conviction_records = load_processed_records(arguments.csv_path)
     platform.replace_conviction_records(conviction_records)
 
     print(f"Migrated {developer_rows} developer rows")
-    print(f"Imported {len(conviction_records)} cleaned conviction records")
+    print(f"Imported {len(conviction_records)} conviction records")
 
 
 if __name__ == "__main__":

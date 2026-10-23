@@ -39,7 +39,7 @@ from models import (
     StatsResponse,
     HealthResponse,
 )
-from data_cleaning import process_efcc_data
+from dataset import CANONICAL_PATH, load_canonical_records
 from developer_platform import (
     DeveloperPlatform,
     default_plan_amount_kobo,
@@ -81,35 +81,18 @@ def load_conviction_data():
             convictions_data = []
         return
     
-    # Try to load from CSV file - check multiple locations
-    possible_paths = [
-        Path("efcc_convictions_updated.csv"),
-        Path("efcc_convictions.csv"),
-        Path(__file__).parent / "efcc_convictions_updated.csv",
-        Path(__file__).parent / "efcc_convictions.csv",
-        Path.cwd() / "efcc_convictions_updated.csv",
-        Path.cwd() / "efcc_convictions.csv",
-    ]
-    
-    csv_file = None
-    for path in possible_paths:
-        if path.exists():
-            csv_file = path
-            break
-    
-    if csv_file:
-        try:
-            df = pd.read_csv(csv_file, engine='python')
-            raw_data = df.to_dict(orient="records")
-            convictions_data = process_efcc_data(raw_data)
-            logger.info("Loaded %s conviction records from %s", len(convictions_data), csv_file)
-        except Exception as e:
-            logger.exception("Failed to load conviction data: %s", e)
-            convictions_data = []
-    else:
-        logger.warning("Conviction CSV file not found")
-        for path in possible_paths:
-            logger.warning("Checked path: %s", path.absolute())
+    # Local development: read the canonical dataset built by scripts/build_dataset.py
+    csv_file = Path(os.getenv("CONVICTIONS_CSV", str(CANONICAL_PATH)))
+    if not csv_file.exists():
+        logger.warning("Conviction dataset not found at %s; run scripts/build_dataset.py", csv_file.absolute())
+        convictions_data = []
+        return
+
+    try:
+        convictions_data = load_canonical_records(csv_file)
+        logger.info("Loaded %s conviction records from %s", len(convictions_data), csv_file)
+    except Exception as e:
+        logger.exception("Failed to load conviction data: %s", e)
         convictions_data = []
 
 
@@ -395,7 +378,11 @@ def build_screening_report(
 
         if location:
             normalized_location = normalize_screening_value(location)
-            normalized_court = normalize_screening_value(record.get("court", ""))
+            normalized_court = normalize_screening_value(
+                " ".join(
+                    filter(None, (record.get("court"), record.get("court_as_recorded"), record.get("court_state")))
+                )
+            )
             if normalized_location and normalized_location not in normalized_court:
                 best_confidence = round(max(0.7, best_confidence - 0.08), 2)
                 best_reason = f"{best_reason}; court location did not match the supplied location context"
@@ -817,6 +804,7 @@ async def search_by_name(
     matches = [
         r for r in convictions_data
         if search_term in r.get('name', '').upper()
+        or search_term in (r.get('aliases') or '').upper()
     ]
     
     if not matches:
@@ -886,6 +874,7 @@ async def filter_by_offense(
     matches = [
         r for r in convictions_data
         if search_term in r.get('offense', '').upper()
+        or search_term in (r.get('offence_category') or '').upper()
     ]
     
     if not matches:
@@ -955,6 +944,7 @@ async def filter_by_court(
     matches = [
         r for r in convictions_data
         if search_term in r.get('court', '').upper()
+        or search_term in (r.get('court_as_recorded') or '').upper()
     ]
     
     if not matches:
@@ -1018,19 +1008,25 @@ async def get_stats():
     # Total cases
     total_cases = len(df)
     
-    # Most common offense
-    offense_counts = df['offense'].value_counts()
+    # Offences: use normalised categories when the canonical dataset is loaded,
+    # so spelling variants of one offence are not counted as different offences.
+    if 'offence_category' in df and df['offence_category'].notna().any():
+        offences = df.loc[~df['offence_category'].isin(["Not stated", "Other"]), 'offence_category']
+    else:
+        offences = df['offense']
+    offense_counts = offences.value_counts()
     most_common_offense = offense_counts.idxmax() if len(offense_counts) > 0 else "N/A"
-    
+    unique_offenses = int(offences.nunique())
+
     # Average prison term (only consider numeric values)
     prison_terms = df[df['prison_term_months'].notna()]['prison_term_months']
     avg_prison_months = float(prison_terms.mean()) if len(prison_terms) > 0 else None
-    
-    # Unique courts
-    unique_courts = df['court'].nunique()
-    
-    # Unique offenses
-    unique_offenses = df['offense'].nunique()
+
+    # Courts: count distinct identified courts (type + location), not spelling variants
+    if 'court_type' in df and df['court_type'].notna().any():
+        unique_courts = int(df.loc[df['court_type'].notna(), 'court'].nunique())
+    else:
+        unique_courts = int(df['court'].nunique())
     
     return StatsResponse(
         total_cases=total_cases,
