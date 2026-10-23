@@ -45,3 +45,10 @@ htmlcov/
 # Environment variables
 .env
 .env.local
+
+# Local databases and secrets (never commit)
+*.db
+*.sqlite
+*.sqlite3
+.env.*
+!.env.example
