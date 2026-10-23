@@ -158,15 +158,22 @@ class ScreeningRequest(BaseModel):
 
 
 class ScreeningMatchRecord(BaseModel):
-    match_type: str = Field(..., description="Match classification such as exact or possible")
+    match_type: str = Field(
+        ...,
+        description=(
+            "exact: all names match in any order; strong: all names match allowing spelling variants; "
+            "possible: one name's words are all in the other; weak: single-name searches only. "
+            "A match never shows that a record is about the person searched."
+        ),
+    )
     confidence: float = Field(..., description="Confidence score between 0 and 1")
     reason: str = Field(..., description="Human-readable explanation for the match")
     record: ConvictionRecord = Field(..., description="Matched conviction record")
 
 
 class ScreeningSummary(BaseModel):
-    exact_matches: int = Field(..., description="Number of exact matches")
-    possible_matches: int = Field(..., description="Number of possible matches")
+    exact_matches: int = Field(..., description="Number of exact name matches returned")
+    possible_matches: int = Field(..., description="Number of strong, possible and weak matches returned")
     total_matches: int = Field(..., description="Total matches returned")
 
 
