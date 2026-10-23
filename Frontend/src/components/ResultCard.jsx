@@ -72,12 +72,14 @@ const ResultCard = ({ result, isDark }) => {
           <div className="space-y-1">
             {result.fine && (
               <p className={`text-sm ${isDark ? "text-white" : "text-gray-900"}`}>
-                <span className={isDark ? "text-gray-400" : "text-gray-600"}>Fine:</span> ₦{result.fine}
+                <span className={isDark ? "text-gray-400" : "text-gray-600"}>Fine:</span> ₦{Number(result.fine).toLocaleString("en-NG")}
               </p>
             )}
             {result.restitution && (
               <p className={`text-sm ${isDark ? "text-white" : "text-gray-900"}`}>
-                <span className={isDark ? "text-gray-400" : "text-gray-600"}>Restitution:</span> ₦{result.restitution}
+                <span className={isDark ? "text-gray-400" : "text-gray-600"}>Restitution:</span>{" "}
+                {/* Restitution carries its own currency, e.g. "USD 4,000" or "NGN 250,000" */}
+                {String(result.restitution).replace(/\bNGN /g, "₦")}
               </p>
             )}
             {!result.fine && !result.restitution && (

@@ -1,11 +1,10 @@
 # Nigeria's Fraud Conviction Records Explorer
 
-A production-ready FastAPI backend for processing and analyzing publicly available fraud conviction records from Nigeria's federal courts.
+A FastAPI backend for searching and analysing fraud conviction records published by Nigeria's Economic and Financial Crimes Commission (EFCC) in its yearly *Narrative of Convictions* tables (2020 to 2024). The convictions were handed down in Federal, State and FCT High Courts.
 
 ## 🎯 Features
 
-- **CSV Data Loading**: Automatically loads and processes conviction records
-- **Data Cleaning**: Handles messy, inconsistent data with smart preprocessing
+- **Reproducible dataset**: `scripts/build_dataset.py` rebuilds `data/convictions.csv` from the EFCC source tables, with stable record IDs and per-record quality flags
 - **Search & Filter**: Search by defendant name, offense type, or court
 - **Analytics**: Generate statistics on conviction patterns
 - **Pagination**: All endpoints support limit/offset pagination
@@ -16,24 +15,31 @@ A production-ready FastAPI backend for processing and analyzing publicly availab
 
 ```
 efcc-convictions-explorer/
-├── main.py                 # FastAPI application & endpoints
-├── models.py              # Pydantic data models
-├── data_cleaning.py       # Data preprocessing utilities
-├── requirements.txt       # Python dependencies
-├── efcc_convictions.csv   # Input data (you provide this)
-└── README.md             # This file
+├── main.py                    # FastAPI application & endpoints
+├── models.py                  # Pydantic data models
+├── dataset.py                 # Loads data/convictions.csv for the API
+├── scripts/build_dataset.py   # Rebuilds the dataset from the EFCC source tables
+├── data/
+│   ├── convictions.csv        # Canonical dataset (single source of truth)
+│   ├── excluded_rows.csv      # Source rows dropped, with reasons
+│   ├── QUALITY_REPORT.md      # Generated coverage and quality report
+│   ├── README.md              # Data dictionary and methodology
+│   └── source/                # EFCC source tables, unmodified
+├── requirements.txt           # Python dependencies
+└── README.md                  # This file
 ```
 
-## 🧹 Data Cleaning Features
+## 🧹 The dataset
 
-The system automatically:
+`data/convictions.csv` is the single source of truth. It is generated, never edited by hand:
 
-- ✅ Converts all text to uppercase
-- ✅ Splits multiple defendants (e.g., "John Doe & ANOR" → separate records)
-- ✅ Removes ₦ symbols, commas from monetary values
-- ✅ Standardizes prison terms (e.g., "5 YEARS" → 60 months)
-- ✅ Handles missing values safely
-- ✅ Removes duplicate records
+```bash
+python scripts/build_dataset.py
+```
+
+See [`data/README.md`](data/README.md) for the field definitions, how the source was cleaned, what is
+deliberately left out, and what each quality flag means. [`data/QUALITY_REPORT.md`](data/QUALITY_REPORT.md)
+shows coverage and flag counts for the current build.
 
 ## 🚀 Quick Start
 
@@ -56,22 +62,16 @@ source venv/bin/activate
 pip install -r requirements.txt
 ```
 
-### 2. Add Data
+### 2. Data
 
-Place your CSV file in the project root:
+The dataset ships with the repository in `data/convictions.csv`. To rebuild it after changing the
+source tables or the build script:
 
 ```bash
-# Copy your CSV file
-cp /path/to/efcc_convictions.csv .
+python scripts/build_dataset.py
 ```
 
-**Expected CSV columns:**
-- `name` - Defendant name(s)
-- `offense` - Offense type
-- `prison_term` - Prison sentence
-- `fine` - Fine amount (optional)
-- `restitution` - Restitution amount (optional)
-- `court` - Court name
+Set `CONVICTIONS_CSV` to load a different file.
 
 ### 3. Run the Server
 
@@ -85,7 +85,7 @@ uvicorn main:app --reload --host 0.0.0.0 --port 8000
 
 Output should show:
 ```
-✓ Loaded 1234 conviction records from CSV
+Loaded 7885 conviction records from data/convictions.csv
 INFO:     Uvicorn running on http://0.0.0.0:8000
 ```
 
@@ -300,15 +300,13 @@ Prison terms are automatically converted to months:
 
 ### Multiple Defendants
 
-Records with multiple defendants are intelligently split:
-- `"JOHN DOE & ANOR"` → only keeps "JOHN DOE" (ANOR = "and another")
-- `"JOHN DOE AND JANE SMITH"` → creates separate records for both
-- `"JOHN DOE, JANE SMITH"` → treats as single name (keeps original)
+Each named defendant gets their own record (e.g. `FC2021-0611-1`, `FC2021-0611-2`), with the others
+listed in `co_defendants`. Unnamed co-defendants ("& 2 ORS") are counted, not invented.
 
 ## 🐛 Troubleshooting
 
-### "CSV file not found"
-Make sure `efcc_convictions.csv` is in the same directory as `main.py`.
+### "Conviction dataset not found"
+Run `python scripts/build_dataset.py` to regenerate `data/convictions.csv`.
 
 ### Port 8000 already in use
 ```bash
@@ -323,19 +321,14 @@ pip install -r requirements.txt
 ```
 
 ### No data loaded
-Check that your CSV has the expected columns: `name`, `offense`, `prison_term`, `court`
+Check the server log for the path it tried, and that `data/convictions.csv` exists.
 
 ## 📊 Data Quality Notes
 
-The data cleaning pipeline is designed to handle:
-- ✅ Mixed case text (converts to uppercase)
-- ✅ Multiple defendants in one record
-- ✅ Currency symbols and formatting
-- ✅ Varied prison term formats
-- ✅ Missing/null values
-- ✅ Duplicate records
-
-However, some data quality issues may persist if they are in the source data. Always validate results for critical uses.
+Records are only as accurate as the EFCC's published tables. Known issues are flagged per record in
+`quality_flags` rather than silently "fixed"; see `data/README.md`. A name match is not proof that a
+person was convicted: always confirm identity using the charge number, court and date with the court
+registry before relying on a record.
 
 ## 📝 License
 

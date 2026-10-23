@@ -25,10 +25,10 @@ def main():
     files = [
         "main.py (FastAPI application)",
         "models.py (Pydantic models)",
-        "data_cleaning.py (Data preprocessing)",
+        "dataset.py (Loads data/convictions.csv)",
+        "scripts/build_dataset.py (Rebuilds the dataset from EFCC source tables)",
         "requirements.txt (Dependencies)",
         "README.md (Full documentation)",
-        "sample_efcc_convictions.csv (Sample data)",
         ".gitignore (Git ignore rules)"
     ]
     for f in files:
@@ -52,9 +52,8 @@ def main():
     print("   pip install -r requirements.txt")
     print("")
     
-    print("4. Add your CSV file or use the sample:")
-    print("   • Copy your CSV as 'efcc_convictions.csv'")
-    print("   • OR rename 'sample_efcc_convictions.csv' to 'efcc_convictions.csv'")
+    print("4. (Optional) Rebuild the dataset from the EFCC source tables:")
+    print("   python scripts/build_dataset.py")
     print("")
     
     print("5. Run the server:")

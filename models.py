@@ -16,7 +16,27 @@ class ConvictionRecord(BaseModel):
     fine: Optional[str] = Field(None, description="Fine amount")
     restitution: Optional[str] = Field(None, description="Restitution amount")
     court: str = Field(..., description="Court name")
-    
+
+    # Provenance and detail from the canonical dataset (data/convictions.csv)
+    record_id: Optional[str] = Field(None, description="Stable FraudCheckr record ID, e.g. FC2024-0848")
+    aliases: Optional[str] = Field(None, description="Other names recorded for the defendant, separated by ';'")
+    defendant_type: Optional[str] = Field(None, description="individual or organisation")
+    co_defendants: Optional[str] = Field(None, description="Other defendants in the same case")
+    charge_number: Optional[str] = Field(None, description="Court charge number as recorded by the EFCC")
+    offence_category: Optional[str] = Field(None, description="Normalised offence category")
+    court_as_recorded: Optional[str] = Field(None, description="Court exactly as written in the source")
+    court_type: Optional[str] = Field(None, description="Federal High Court, State High Court, FCT High Court, etc.")
+    court_state: Optional[str] = Field(None, description="State (or FCT) where the court sits")
+    judge: Optional[str] = Field(None, description="Presiding judge")
+    date_filed: Optional[str] = Field(None, description="Date the charge was filed (ISO 8601)")
+    date_of_conviction: Optional[str] = Field(None, description="Date of conviction (ISO 8601; YYYY-MM when only the month is known)")
+    sentence: Optional[str] = Field(None, description="Sentence text as recorded in the source")
+    option_of_fine: Optional[bool] = Field(None, description="Whether the sentence carried an option of fine")
+    forfeiture: Optional[bool] = Field(None, description="Whether property was ordered forfeited")
+    source_table: Optional[str] = Field(None, description="EFCC table the record comes from")
+    source_serial: Optional[str] = Field(None, description="Serial number of the row in that table")
+    quality_flags: list[str] = Field(default_factory=list, description="Data-quality notes; see data/DATA_DICTIONARY.md")
+
     class Config:
         json_schema_extra = {
             "example": {
