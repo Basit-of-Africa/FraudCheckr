@@ -35,7 +35,8 @@ class ConvictionRecord(BaseModel):
     forfeiture: Optional[bool] = Field(None, description="Whether property was ordered forfeited")
     source_table: Optional[str] = Field(None, description="EFCC table the record comes from")
     source_serial: Optional[str] = Field(None, description="Serial number of the row in that table")
-    quality_flags: list[str] = Field(default_factory=list, description="Data-quality notes; see data/DATA_DICTIONARY.md")
+    quality_flags: list[str] = Field(default_factory=list, description="Data-quality notes; see data/README.md")
+    editor_note: Optional[str] = Field(None, description="Note added by FraudCheckr after reviewing the record")
 
     class Config:
         json_schema_extra = {

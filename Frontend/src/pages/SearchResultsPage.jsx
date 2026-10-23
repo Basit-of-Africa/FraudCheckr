@@ -7,6 +7,7 @@ import ResultCard from "../components/ResultCard";
 import Loader from "../components/Loader";
 import EmptyState from "../components/EmptyState";
 import { getApiBaseUrl } from "../lib/api";
+import { FACTS } from "../lib/facts";
 
 const SearchResultsPage = ({ isDark }) => {
   const [searchParams] = useSearchParams();
@@ -67,6 +68,11 @@ const SearchResultsPage = ({ isDark }) => {
             <EmptyState message={error} isDark={isDark} />
           ) : results.length > 0 ? (
             <>
+              <div className={`rounded-lg border p-4 mb-6 text-sm ${isDark ? "bg-amber-900/20 border-amber-700/40 text-amber-200" : "bg-amber-50 border-amber-200 text-amber-900"}`}>
+                <strong>A matching name is not proof that a particular person was convicted.</strong>{" "}
+                Many people share names. Check the charge number, court and date with the court registry before relying on a record,
+                and remember a conviction may have been overturned on appeal.
+              </div>
               <p className={`${isDark ? "text-gray-400" : "text-gray-600"} mb-6`}>
                 Showing {results.length} matching record{results.length !== 1 ? "s" : ""}
               </p>
@@ -76,13 +82,17 @@ const SearchResultsPage = ({ isDark }) => {
             </>
           ) : (
             <>
-              <EmptyState message={`No records found for "${query}". Try a different search.`} isDark={isDark} />
+              <EmptyState message={`No records found for "${query}". Try a different spelling.`} isDark={isDark} />
+              <p className={`text-sm text-center -mt-2 mb-6 ${isDark ? "text-gray-400" : "text-gray-600"}`}>
+                No result does not mean a person has no conviction. FraudCheckr only covers convictions listed in the
+                EFCC's Narrative of Convictions tables for {FACTS.yearsLabel}.
+              </p>
               <div className={`border rounded-lg p-6 ${isDark ? "bg-slate-800 border-slate-700" : "bg-gray-50 border-gray-200"}`}>
                 <h3 className={`text-lg font-semibold mb-2 ${isDark ? "text-white" : "text-gray-900"}`}>Search Tips:</h3>
                 <ul className={`space-y-2 text-sm ${isDark ? "text-gray-400" : "text-gray-600"}`}>
-                  <li>• Try searching with just a first name or last name</li>
+                  <li>• Try a surname on its own, or another spelling</li>
                   <li>• Search is case-insensitive</li>
-                  <li>• Partial matches are supported</li>
+                  <li>• Partial matches and recorded aliases are included</li>
                   <li>• Visit the <a href="/insights" className={`${isDark ? "text-blue-400 hover:text-blue-300" : "text-blue-600 hover:text-blue-700"}`}>Insights</a> page to explore conviction statistics</li>
                 </ul>
               </div>

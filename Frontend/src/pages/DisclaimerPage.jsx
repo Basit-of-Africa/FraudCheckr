@@ -1,220 +1,92 @@
 import React from "react";
-import { AlertTriangle, Shield, Info } from "lucide-react";
+import { AlertTriangle } from "lucide-react";
+import LegalDocument from "../components/LegalDocument";
+import { FACTS, OPERATORS } from "../lib/facts";
 
-const DisclaimerPage = ({ isDark }) => {
-  const headingClass = isDark ? "text-white" : "text-gray-900";
-  const textSecondaryClass = isDark ? "text-gray-400" : "text-gray-600";
-  const bgClass = isDark ? "bg-slate-800" : "bg-gray-50";
-  const borderClass = isDark ? "border-slate-700" : "border-gray-200";
+const UPDATED = "23 October 2026";
+const METHOD_URL = "https://github.com/Basit-of-Africa/FraudCheckr/blob/master/data/README.md";
 
-  return (
-    <div className={`min-h-screen py-20 px-4 transition-colors ${isDark ? "bg-slate-900" : "bg-white"}`}>
-      <div className="max-w-4xl mx-auto">
-        {/* Header */}
-        <div className="mb-12">
-          <div className="flex items-center gap-3 mb-4">
-            <AlertTriangle className="w-8 h-8 text-red-500" />
-            <h1 className={`text-4xl md:text-5xl font-bold ${headingClass}`}>
-              Disclaimer
-            </h1>
-          </div>
-          <p className={`text-lg ${textSecondaryClass}`}>
-            Important Legal Information
-          </p>
-        </div>
-
-        {/* Critical Warning */}
-        <div className={`p-6 rounded-lg border-2 border-red-500 ${isDark ? "bg-red-500/10" : "bg-red-50"} mb-8`}>
-          <h2 className={`text-2xl font-bold text-red-600 mb-3 flex items-center gap-2`}>
-            <AlertTriangle className="w-6 h-6" />
-            General Disclaimer
-          </h2>
-          <p className={`${textSecondaryClass} font-semibold`}>
-            The information provided by FraudCheckr is for informational purposes only. While we strive to provide accurate and up-to-date information, we make no warranties or representations about the accuracy, completeness, or reliability of any information on this site.
-          </p>
-        </div>
-
-        {/* Content */}
-        <div className="space-y-8">
-          {/* No Legal Advice */}
-          <section className={`p-6 rounded-lg border ${bgClass} ${borderClass}`}>
-            <h2 className={`text-2xl font-bold ${headingClass} mb-4 flex items-center gap-2`}>
-              <Info className="w-6 h-6 text-blue-500" />
-              1. Not Legal Advice
-            </h2>
-            <p className={`${textSecondaryClass} mb-4`}>
-              FraudCheckr is not a law firm, and nothing on this site constitutes legal advice. Information provided about fraud convictions is for research and informational purposes only.
-            </p>
-            <p className={textSecondaryClass}>
-              If you need legal advice, please consult with a qualified attorney. Do not rely solely on information from FraudCheckr for legal decisions or actions.
-            </p>
-          </section>
-
-          {/* Public Information */}
-          <section className={`p-6 rounded-lg border ${bgClass} ${borderClass}`}>
-            <h2 className={`text-2xl font-bold ${headingClass} mb-4`}>
-              2. Public Information Source
-            </h2>
-            <p className={`${textSecondaryClass} mb-4`}>
-              All conviction records on FraudCheckr are sourced from public federal court records and official proceedings. While we verify data against official sources, we cannot guarantee absolute accuracy.
-            </p>
-            <p className={textSecondaryClass}>
-              For official, certified records, please contact:
-            </p>
-            <ul className={`space-y-2 mt-4 ${textSecondaryClass}`}>
-              <li>• <strong>EFCC Official Website:</strong> www.efcc.gov.ng</li>
-              <li>• <strong>Federal High Courts:</strong> contact your local court directly</li>
-              <li>• <strong>Court Records:</strong> verify with the presiding judge's office</li>
-            </ul>
-          </section>
-
-          {/* No Verification */}
-          <section className={`p-6 rounded-lg border ${bgClass} ${borderClass}`}>
-            <h2 className={`text-2xl font-bold ${headingClass} mb-4`}>
-              3. Limited Verification
-            </h2>
-            <p className={`${textSecondaryClass}`}>
-              While we make reasonable efforts to ensure data accuracy, FraudCheckr:
-            </p>
-            <ul className={`space-y-2 mt-4 ${textSecondaryClass}`}>
-              <li>• Does not independently investigate all records</li>
-              <li>• Cannot verify the current status of convictions (e.g., appeals pending)</li>
-              <li>• May have incomplete information about ongoing cases</li>
-              <li>• Relies on historical data that may not reflect recent developments</li>
-            </ul>
-          </section>
-
-          {/* Responsible Use */}
-          <section className={`p-6 rounded-lg border ${bgClass} ${borderClass}`}>
-            <h2 className={`text-2xl font-bold ${headingClass} mb-4`}>
-              4. Responsible Use Only
-            </h2>
-            <p className={`${textSecondaryClass} mb-4`}>
-              FraudCheckr is intended for legitimate purposes only, including:
-            </p>
-            <ul className={`space-y-2 ${textSecondaryClass}`}>
-              <li>✓ Journalism and investigative reporting</li>
-              <li>✓ Academic and research purposes</li>
-              <li>✓ Compliance and due diligence</li>
-              <li>✓ Personal information verification</li>
-              <li>✓ Public interest research</li>
-            </ul>
-            <p className={`${textSecondaryClass} mt-4`}>
-              Prohibited uses include harassment, discrimination, unauthorized background checks, or violating individuals' privacy rights.
-            </p>
-          </section>
-
-          {/* No Liability */}
-          <section className={`p-6 rounded-lg border ${bgClass} ${borderClass}`}>
-            <h2 className={`text-2xl font-bold ${headingClass} mb-4 flex items-center gap-2`}>
-              <Shield className="w-6 h-6 text-orange-500" />
-              5. Limitation of Liability
-            </h2>
-            <p className={`${textSecondaryClass} mb-4`}>
-              To the maximum extent permitted by law, FraudCheckr shall not be liable for:
-            </p>
-            <ul className={`space-y-2 ${textSecondaryClass}`}>
-              <li>• Inaccuracies or omissions in conviction data</li>
-              <li>• Damages resulting from reliance on information</li>
-              <li>• Lost income, profits, or business opportunities</li>
-              <li>• Decisions made based on FraudCheckr data</li>
-              <li>• Service interruptions or downtime</li>
-              <li>• Unauthorized access to user data</li>
-            </ul>
-          </section>
-
-          {/* Indemnification */}
-          <section className={`p-6 rounded-lg border ${bgClass} ${borderClass}`}>
-            <h2 className={`text-2xl font-bold ${headingClass} mb-4`}>
-              6. Indemnification
-            </h2>
-            <p className={textSecondaryClass}>
-              You agree to indemnify and hold harmless FraudCheckr, its owners, operators, and employees from any claims, damages, or losses arising from your use of the site, misuse of data, or violations of applicable laws.
-            </p>
-          </section>
-
-          {/* Accuracy Disclaimer */}
-          <section className={`p-6 rounded-lg border ${bgClass} ${borderClass}`}>
-            <h2 className={`text-2xl font-bold ${headingClass} mb-4`}>
-              7. Verification of Information
-            </h2>
-            <p className={`${textSecondaryClass}`}>
-              Before taking any action based on information from FraudCheckr, you should:
-            </p>
-            <ul className={`space-y-2 mt-4 ${textSecondaryClass}`}>
-              <li>1. Consult with qualified legal counsel</li>
-              <li>2. Verify information with official federal court records and sources</li>
-              <li>3. Contact relevant courts for current case status</li>
-              <li>4. Cross-check with multiple reliable sources</li>
-              <li>5. Document verification for your records</li>
-            </ul>
-          </section>
-
-          {/* Changes & Updates */}
-          <section className={`p-6 rounded-lg border ${bgClass} ${borderClass}`}>
-            <h2 className={`text-2xl font-bold ${headingClass} mb-4`}>
-              8. Disclaimer of Warranties
-            </h2>
-            <p className={textSecondaryClass}>
-              FraudCheckr is provided "AS IS" without any warranties of any kind, express or implied. We do not warrant that:
-            </p>
-            <ul className={`space-y-2 mt-4 ${textSecondaryClass}`}>
-              <li>• The site will be uninterrupted or error-free</li>
-              <li>• Information will be accurate or complete</li>
-              <li>• The site is free of viruses or malicious code</li>
-              <li>• Data will be available at all times</li>
-            </ul>
-          </section>
-
-          {/* Third-Party Content */}
-          <section className={`p-6 rounded-lg border ${bgClass} ${borderClass}`}>
-            <h2 className={`text-2xl font-bold ${headingClass} mb-4`}>
-              9. Third-Party Links & Content
-            </h2>
-            <p className={`${textSecondaryClass}`}>
-              FraudCheckr may contain links to third-party websites. We are not responsible for the content, accuracy, or practices of external sites. Use third-party content at your own risk.
-            </p>
-          </section>
-
-          {/* Copyright */}
-          <section className={`p-6 rounded-lg border ${bgClass} ${borderClass}`}>
-            <h2 className={`text-2xl font-bold ${headingClass} mb-4`}>
-              10. Intellectual Property Rights
-            </h2>
-            <p className={`${textSecondaryClass} mb-4`}>
-              FraudCheckr's original content is protected by copyright. You may not reproduce, distribute, or republish content without permission.
-            </p>
-            <p className={textSecondaryClass}>
-              Fraud conviction data from federal courts is public information and may be subject to different licensing. Contact us for licensing inquiries.
-            </p>
-          </section>
-
-          {/* Severability */}
-          <section className={`p-6 rounded-lg border ${bgClass} ${borderClass}`}>
-            <h2 className={`text-2xl font-bold ${headingClass} mb-4`}>
-              11. Severability
-            </h2>
-            <p className={textSecondaryClass}>
-              If any provision of this disclaimer is found to be invalid or unenforceable, the remaining provisions shall remain in full force and effect.
-            </p>
-          </section>
-
-          {/* Contact */}
-          <section className={`p-6 rounded-lg border border-red-500/30 ${isDark ? "bg-red-500/10" : "bg-red-50"}`}>
-            <h2 className={`text-2xl font-bold ${headingClass} mb-4`}>
-              Questions About This Disclaimer?
-            </h2>
-            <p className={`${textSecondaryClass} mb-4`}>
-              If you have concerns about information accuracy or need clarification:
-            </p>
-            <p className={`${textSecondaryClass}`}>
-              <strong>Email:</strong> support@fraudcheckr.com
-            </p>
-          </section>
-        </div>
-      </div>
-    </div>
-  );
-};
+const DisclaimerPage = ({ isDark }) => (
+  <LegalDocument
+    isDark={isDark}
+    icon={AlertTriangle}
+    title="Disclaimer and Corrections"
+    updated={UPDATED}
+    intro="Please read this before relying on any FraudCheckr record. It explains what a record does and does not show, how we prepared the data, and how to ask for a correction or removal."
+    sections={[
+      {
+        heading: "Who we are",
+        body: [
+          `FraudCheckr is an independent research tool operated by ${OPERATORS}. It is not affiliated with, endorsed by or acting for the Economic and Financial Crimes Commission (EFCC), any court or any government body. Nothing on FraudCheckr is legal advice.`,
+        ],
+      },
+      {
+        heading: "Where the records come from",
+        body: [
+          `Every record comes from the EFCC's Narrative of Convictions tables for ${FACTS.yearsLabel}, in which the EFCC lists convictions it secured in Federal, State and FCT High Courts. We do not add records from other sources. The original tables are the authoritative source; for certified information, contact the court that heard the case.`,
+        ],
+      },
+      {
+        heading: "What a record shows, and what it does not",
+        body: [
+          "A record shows that the EFCC reported a conviction of a person or organisation with that name, in that court, on that date.",
+          "A record does not:",
+          {
+            list: [
+              "identify a particular person. The EFCC's tables have no dates of birth or ID numbers, and many people share names",
+              "show whether the conviction was later overturned on appeal, set aside, or followed by a pardon",
+              "show whether a prison term was served, or a fine paid instead",
+              "cover convictions outside the EFCC's published tables. No result does not mean a person has no conviction",
+            ],
+          },
+          {
+            note: "Do not make a decision about a person based on a FraudCheckr record alone. Confirm the charge number, court and date with the court registry, and give the person a chance to respond.",
+          },
+        ],
+      },
+      {
+        heading: "How we prepared the data",
+        body: [
+          "The EFCC's tables were extracted from PDFs and contained errors introduced along the way. We corrected those we could establish from the data itself, such as columns that had slipped, dates whose day and month had been swapped, and names that had been split or merged. The sentence is always shown exactly as the EFCC recorded it.",
+          "Where we could not be sure, we did not guess. The record carries a quality note instead, for example when a court was worked out from the charge number, or when the sentence text mentions an acquittal although the EFCC lists the case as a conviction.",
+          `We have not checked each record against court files. Our full method, and every correction rule, is published in the [dataset documentation](${METHOD_URL}).`,
+        ],
+      },
+      {
+        id: "corrections",
+        heading: "Corrections and removal",
+        body: [
+          "Anyone can report an error. If you are named in a record, or represent someone who is, you can ask us to correct it, add context to it, or remove it.",
+          "Email accuracy@fraudcheckr.com with:",
+          {
+            list: [
+              "the record ID shown on the record (for example FC2024-0848)",
+              "what is wrong, and what you believe is correct",
+              "any document that supports your request, such as an appeal judgment, a court order or proof that the record is about someone else",
+              "if you are asking about a record about yourself, enough information for us to confirm who you are",
+            ],
+          },
+          "What we will do:",
+          {
+            list: [
+              "acknowledge your request within 5 working days",
+              "where you show that a record is likely to be wrong, or the conviction was overturned, hide the record from public view while we review it",
+              "decide within 30 days and tell you the outcome and our reasons",
+            ],
+          },
+          "Possible outcomes are that we correct the record, add a note to it (for example that an appeal is pending or succeeded), remove it, or keep it unchanged with reasons. We remove records where a conviction has been overturned or set aside, or where a record cannot be reliably separated from someone it is not about.",
+          "If you disagree with our decision, reply with any further information and a different member of the team will look at it again. You can also complain to the Nigeria Data Protection Commission; see our [Privacy Policy](/privacy).",
+          "When we change or remove a record, the change also applies to the API, and API users must update their copies under our [Terms of Service](/terms).",
+        ],
+      },
+      {
+        heading: "Liability",
+        body: [
+          "We work to keep FraudCheckr accurate, but we cannot guarantee it. Our responsibility to users is set out in the [Terms of Service](/terms).",
+        ],
+      },
+    ]}
+  />
+);
 
 export default DisclaimerPage;

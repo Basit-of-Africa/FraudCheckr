@@ -1,0 +1,11 @@
+{
+  "records": 7876,
+  "firstTableYear": 2020,
+  "lastTableYear": 2024,
+  "courts": 99,
+  "states": 32,
+  "includesFct": true,
+  "efccZones": 15,
+  "offenceCategories": 16,
+  "withChargeNumberPct": 99
+}

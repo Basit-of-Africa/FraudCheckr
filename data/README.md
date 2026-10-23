@@ -99,6 +99,7 @@ are in `QUALITY_REPORT.md`.
 | Flag | Meaning |
 |---|---|
 | `sentence_mentions_acquittal_or_discharge` | Listed as a conviction, but the sentence text mentions an acquittal or discharge. **Review before publishing.** |
+| `sentence_names_specific_defendants` | Several defendants were named in one source row and the sentence refers to specific ones ("only the 2nd defendant"). The outcome may differ between them. **Review before publishing.** |
 | `possible_duplicate` | Same name and charge number appear more than once with different details |
 | `conviction_date_day_month_corrected` | Day and month were swapped back to undo a spreadsheet misreading |
 | `date_order_uncertain` | Day/month order could not be established for this block; the table default was used |
@@ -126,6 +127,22 @@ are in `QUALITY_REPORT.md`.
 | `numbered_defendant_list` | Defendants were split from a numbered list |
 | `multiple_names_unsplit` | Looks like several names, but could not be split safely |
 | `unnamed_co_defendants` | Source mentions other, unnamed defendants |
+
+## Record actions
+
+`record_actions.csv` holds editorial decisions about individual records, applied by the API when it
+loads the data (it does not change `convictions.csv`):
+
+| Column | Meaning |
+|---|---|
+| `record_id` | The record concerned |
+| `action` | `hide`: not served by the website or API (e.g. under review after a correction request, or acquitted). `note`: served with `note` shown to readers |
+| `note` | Text shown with the record (for `note`) |
+| `reason` | Why the action was taken (internal) |
+| `date` | When it was taken |
+
+The build fails if an action refers to a record ID that no longer exists, so a change in IDs cannot
+silently un-hide a record.
 
 ## Using this data responsibly
 

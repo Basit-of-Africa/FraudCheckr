@@ -43,7 +43,7 @@ python main.py
 
 **Expected output:**
 ```
-[LOAD] SUCCESS: Loaded 864 conviction records from efcc_convictions.csv
+[LOAD] SUCCESS: Loaded 7876 conviction records from data/convictions.csv
 INFO:     Uvicorn running on http://0.0.0.0:8000
 ```
 

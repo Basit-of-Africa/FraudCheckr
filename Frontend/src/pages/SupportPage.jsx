@@ -19,17 +19,17 @@ const SupportPage = ({ isDark }) => {
             </h1>
           </div>
           <p className={`text-xl ${textSecondaryClass} max-w-2xl mx-auto`}>
-            We're here to help! Get assistance with using FraudCheckr, troubleshoot issues, or learn more about our services.
+            Help with searching, the API, and reporting a record that is wrong.
           </p>
         </div>
 
         {/* Quick Links */}
         <div className="grid md:grid-cols-3 gap-6 mb-16">
           {/* Status */}
-          <a href="/status" className={`p-8 rounded-lg border text-center transition-all hover:shadow-lg ${bgClass} ${borderClass}`}>
-            <clock className="w-12 h-12 text-green-500 mx-auto mb-4" />
-            <h3 className={`text-xl font-bold ${headingClass} mb-2`}>System Status</h3>
-            <p className={textSecondaryClass}>Check if the site is operational</p>
+          <a href="/disclaimer#corrections" className={`p-8 rounded-lg border text-center transition-all hover:shadow-lg ${bgClass} ${borderClass}`}>
+            <AlertCircle className="w-12 h-12 text-green-500 mx-auto mb-4" />
+            <h3 className={`text-xl font-bold ${headingClass} mb-2`}>Corrections</h3>
+            <p className={textSecondaryClass}>Report a record that is wrong or about you</p>
           </a>
 
           {/* Documentation */}
@@ -64,9 +64,6 @@ const SupportPage = ({ isDark }) => {
                       support@fraudcheckr.com
                     </a>
                   </p>
-                  <p className={`text-sm ${textSecondaryClass} mt-2`}>
-                    Response time: 24-48 hours
-                  </p>
                 </div>
               </div>
             </div>
@@ -76,15 +73,12 @@ const SupportPage = ({ isDark }) => {
               <div className="flex items-start gap-4">
                 <Headphones className="w-8 h-8 text-purple-500 flex-shrink-0 mt-1" />
                 <div>
-                  <h3 className={`text-xl font-bold ${headingClass} mb-2`}>Priority Support</h3>
+                  <h3 className={`text-xl font-bold ${headingClass} mb-2`}>API Support</h3>
                   <p className={textSecondaryClass}>For API customers only</p>
                   <p className="mt-4">
                     <a href="mailto:api@fraudcheckr.com" className="text-purple-500 hover:text-purple-600 font-semibold">
                       api@fraudcheckr.com
                     </a>
-                  </p>
-                  <p className={`text-sm ${textSecondaryClass} mt-2`}>
-                    Response time: 2-4 hours (Business hours)
                   </p>
                 </div>
               </div>
@@ -105,10 +99,9 @@ const SupportPage = ({ isDark }) => {
                 <div className={`mt-4 ${textSecondaryClass} space-y-2`}>
                   <p>Try these steps:</p>
                   <ul className="list-disc list-inside space-y-1 text-sm">
-                    <li>Check spelling of the defendant's name</li>
-                    <li>Try searching with just first or last name</li>
-                    <li>Use our Insights page to browse statistics</li>
-                    <li>Contact support if name should exist</li>
+                    <li>Try another spelling; the EFCC's tables vary</li>
+                    <li>Try a surname on its own</li>
+                    <li>Remember the data only covers the EFCC's published tables</li>
                   </ul>
                 </div>
               </details>
@@ -123,9 +116,8 @@ const SupportPage = ({ isDark }) => {
                   <p>Try these steps:</p>
                   <ul className="list-disc list-inside space-y-1 text-sm">
                     <li>Check your internet connection</li>
-                    <li>Clear browser cache and cookies</li>
+                    <li>Reload the page</li>
                     <li>Try a different browser</li>
-                    <li>Check our status page: status.fraudcheckr.com</li>
                     <li>Wait a few minutes and try again</li>
                   </ul>
                 </div>
@@ -140,12 +132,13 @@ const SupportPage = ({ isDark }) => {
                 <div className={`mt-4 ${textSecondaryClass} space-y-2`}>
                   <p>Common causes:</p>
                   <ul className="list-disc list-inside space-y-1 text-sm">
-                    <li>Invalid or expired API key</li>
-                    <li>Missing Authorization header</li>
+                    <li>Invalid or revoked API key</li>
+                    <li>Missing X-API-Key header</li>
+                    <li>Inactive subscription</li>
                     <li>Incorrect API endpoint URL</li>
                     <li>Rate limit exceeded</li>
                   </ul>
-                  <p className="mt-3 text-sm">Email api@fraudcheckr.com with your API key (partially masked) and error message.</p>
+                  <p className="mt-3 text-sm">Email api@fraudcheckr.com with the error message and the first few characters of your key. Never send a full API key.</p>
                 </div>
               </details>
 
@@ -156,40 +149,17 @@ const SupportPage = ({ isDark }) => {
                   <span className="group-open:rotate-180 transition-transform">↓</span>
                 </summary>
                 <div className={`mt-4 ${textSecondaryClass} space-y-2`}>
-                  <p>Please help us improve:</p>
+                  <p>Email accuracy@fraudcheckr.com with:</p>
                   <ul className="list-disc list-inside space-y-1 text-sm">
-                    <li>Document the inaccuracy with details</li>
-                    <li>Provide the correct information if possible</li>
-                    <li>Include official source/reference</li>
-                    <li>Email accuracy@fraudcheckr.com</li>
+                    <li>The record ID (for example FC2024-0848)</li>
+                    <li>What is wrong, and what is correct</li>
+                    <li>Any court document or reference that shows it</li>
                   </ul>
+                  <p className="text-sm">
+                    See the <a href="/disclaimer#corrections" className="text-blue-500 hover:text-blue-600">corrections process</a>.
+                  </p>
                 </div>
               </details>
-            </div>
-          </div>
-        </div>
-
-        {/* Support Resources */}
-        <div className={`mt-16 p-8 rounded-lg border-2 border-blue-500 ${isDark ? "bg-blue-500/10" : "bg-blue-50"}`}>
-          <h2 className={`text-2xl font-bold ${headingClass} mb-6`}>Additional Resources</h2>
-          <div className="grid md:grid-cols-3 gap-6">
-            <div>
-              <h3 className={`font-bold ${headingClass} mb-2`}>Community</h3>
-              <p className={textSecondaryClass}>
-                Join our community forum to connect with other users and share tips.
-              </p>
-            </div>
-            <div>
-              <h3 className={`font-bold ${headingClass} mb-2`}>Knowledge Base</h3>
-              <p className={textSecondaryClass}>
-                Browse detailed articles and guides on using FraudCheckr features.
-              </p>
-            </div>
-            <div>
-              <h3 className={`font-bold ${headingClass} mb-2`}>Video Tutorials</h3>
-              <p className={textSecondaryClass}>
-                Watch step-by-step guides on how to search and use our platform.
-              </p>
             </div>
           </div>
         </div>
@@ -197,13 +167,13 @@ const SupportPage = ({ isDark }) => {
         {/* Contact CTA */}
         <div className="text-center mt-16">
           <p className={`${textSecondaryClass} mb-6`}>
-            Still need help? Our support team is ready to assist.
+            Still need help?
           </p>
           <a
             href="/contact"
             className="inline-block px-8 py-3 bg-blue-600 text-white font-semibold rounded-lg hover:bg-blue-700 hover:shadow-lg transition"
           >
-            Contact Support Team
+            Contact us
           </a>
         </div>
       </div>

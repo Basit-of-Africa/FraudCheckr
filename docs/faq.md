@@ -14,17 +14,17 @@ The platform is completely **free and open source**.
 
 ### Can I use this commercially?
 
-Yes, subject to the license. Check [LICENSE](../LICENSE) file for details.
+See the Terms of Service on the website. No open-source licence has been published for this repository yet.
 
 ### Is the data verified?
 
-Yes, all data comes from official EFCC conviction records from court proceedings (2020-2024).
+All records come from the EFCC's published *Narrative of Convictions* tables (2020–2024). Extraction errors are corrected and anything uncertain is flagged, but records have not been checked against court files. See `data/README.md`.
 
 ### What's included in the platform?
 
 - Backend REST API (FastAPI)
 - Frontend dashboard (React)
-- 7,788 conviction records (2020-2024)
+- EFCC conviction records, 2020–2024 tables
 - Statistical analytics
 - Full documentation
 
@@ -74,13 +74,13 @@ Approximately:
 
 ### How many records are in the database?
 
-**7,788 conviction records** (2020-2024).
+See `data/QUALITY_REPORT.md` for the current count (one record per defendant, from the EFCC's 2020–2024 tables).
 
 Some cases involve multiple defendants, which are split into separate records for analysis.
 
 ### What years does the data cover?
 
-The current dataset covers **2020-2024**. It can be updated with new data from EFCC.
+The dataset covers the EFCC's tables for **2020–2024**. New tables can be added to `data/source/` and the dataset rebuilt with `python scripts/build_dataset.py`.
 
 ### Can I import my own data?
 
@@ -104,7 +104,7 @@ See [Data Schema](./architecture/data-schema.md) for details.
 
 ### Can I download all the data?
 
-Yes, download the `efcc_convictions.csv` file from the project repository.
+Yes, download the `data/convictions.csv` file from the project repository.
 
 ### Is personal data protected?
 

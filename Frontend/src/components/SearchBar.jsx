@@ -2,6 +2,7 @@
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { Search, ArrowRight } from "lucide-react";
+import { FACTS } from "../lib/facts";
 
 const SearchBar = ({ initialValue = "", isDark = false }) => {
   const [query, setQuery] = useState(initialValue);
@@ -63,7 +64,7 @@ const SearchBar = ({ initialValue = "", isDark = false }) => {
       <p className={`text-center text-xs mt-3 transition-colors duration-200 ${
         isDark ? "text-gray-500" : "text-gray-500"
       }`}>
-        Search across 7,788 verified conviction records
+        Search {FACTS.recordsLabel} conviction records published by the EFCC
       </p>
     </form>
   );

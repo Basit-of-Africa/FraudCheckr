@@ -1,5 +1,6 @@
 import React from "react";
 import { Target, Users, Shield, TrendingUp } from "lucide-react";
+import { FACTS, OPERATORS } from "../lib/facts";
 
 const AboutPage = ({ isDark }) => {
   const bgClass = isDark ? "bg-slate-900" : "bg-white";
@@ -17,10 +18,10 @@ const AboutPage = ({ isDark }) => {
             About FraudCheckr
           </h1>
           <p className={`text-xl ${textSecondaryClass} max-w-3xl mx-auto`}>
-            Empowering transparency and accountability in financial crime prosecution through accessible, verified conviction data
+            Making the EFCC's published conviction records easy to search, understand and check
           </p>
           <p className={`text-base ${textSecondaryClass} max-w-3xl mx-auto mt-4`}>
-            FraudCheckr is a conviction-screening and research platform built from public records. It is not a full identity-verification, sanctions-screening, or consumer-credit reporting service.
+            FraudCheckr is an independent public-interest research tool. It is not affiliated with the EFCC or any court, and it is not an identity-verification, background-check, sanctions-screening or credit-reporting service.
           </p>
         </div>
 
@@ -28,44 +29,44 @@ const AboutPage = ({ isDark }) => {
         <div className="grid md:grid-cols-2 gap-8 mb-20">
           <div className={`p-8 rounded-2xl border ${cardBgClass}`}>
             <Target className="w-12 h-12 text-blue-500 mb-4" />
-            <h2 className={`text-2xl font-bold ${headingClass} mb-4`}>Our Mission</h2>
+            <h2 className={`text-2xl font-bold ${headingClass} mb-4`}>Why we built it</h2>
             <p className={textSecondaryClass}>
-              To reduce financial crime by providing journalists, researchers, compliance professionals, and the general public with transparent access to verified fraud conviction records from Nigeria's federal courts. We believe in making official data accessible to everyone.
+              The EFCC publishes its conviction records each year as long tables extracted from PDFs. They are public, but hard to search and harder to analyse. FraudCheckr turns them into a searchable, documented dataset so journalists, researchers and citizens can follow how financial crime is prosecuted.
             </p>
           </div>
 
           <div className={`p-8 rounded-2xl border ${cardBgClass}`}>
             <TrendingUp className="w-12 h-12 text-purple-500 mb-4" />
-            <h2 className={`text-2xl font-bold ${headingClass} mb-4`}>Our Vision</h2>
+            <h2 className={`text-2xl font-bold ${headingClass} mb-4`}>What we aim for</h2>
             <p className={textSecondaryClass}>
-              To become the leading open-source platform for fraud conviction intelligence in Africa, serving as a critical tool for financial integrity and public accountability while maintaining the highest standards of data accuracy and security.
+              A trustworthy public record of fraud convictions in Nigeria: accurate to its source, open about its limits, and fair to the people named in it.
             </p>
           </div>
         </div>
 
         {/* Key Features */}
         <div className="mb-20">
-          <h2 className={`text-4xl font-bold ${headingClass} text-center mb-12`}>Why Choose FraudCheckr?</h2>
+          <h2 className={`text-4xl font-bold ${headingClass} text-center mb-12`}>How we handle the data</h2>
           <div className="grid md:grid-cols-2 gap-8">
             {[
               {
-                title: "Verified Data",
-                description: "All conviction records are sourced from official federal court proceedings and documented cases",
+                title: "One public source",
+                description: `Every record comes from the EFCC's Narrative of Convictions tables (${FACTS.yearsLabel}) and links back to its table and row.`,
                 icon: Shield
               },
               {
-                title: "Real-time Updates",
-                description: "Database is continuously updated with new convictions and case information",
+                title: "Cleaned, not altered",
+                description: "We fix extraction errors such as swapped columns and misread dates, and flag anything uncertain. The original sentence text is always kept.",
                 icon: TrendingUp
               },
               {
-                title: "Easy Search",
-                description: "Simple, intuitive search interface for finding specific defendants or offense types",
+                title: "Checkable",
+                description: `${FACTS.withChargeNumberPct}% of records carry the court charge number, so anyone can confirm a record with the court registry.`,
                 icon: "🔍"
               },
               {
-                title: "Comprehensive Analytics",
-                description: "Explore conviction trends, sentencing patterns, and court distributions",
+                title: "Careful about people",
+                description: "We do not publish victims' names, where convicts are held or their release dates. People named can ask for corrections.",
                 icon: "📊"
               }
             ].map((feature, idx) => {
@@ -87,31 +88,31 @@ const AboutPage = ({ isDark }) => {
 
         {/* Use Cases */}
         <div className="mb-20">
-          <h2 className={`text-4xl font-bold ${headingClass} text-center mb-12`}>Who Uses FraudCheckr?</h2>
+          <h2 className={`text-4xl font-bold ${headingClass} text-center mb-12`}>Who it's for</h2>
           <div className="grid md:grid-cols-3 gap-8">
             {[
               {
                 org: "📰 Journalists & Media",
                 uses: [
-                  "Investigative reporting on financial crimes",
-                  "Fact-checking fraud claims",
-                  "Writing crime trend analyses"
+                  "Reporting on fraud prosecutions",
+                  "Fact-checking claims about convictions",
+                  "Analysing trends by offence and court"
                 ]
               },
               {
-                org: "🏢 Compliance Professionals",
+                org: "🤝 Civil Society",
                 uses: [
-                  "Due diligence and background checks",
-                  "Regulatory compliance verification",
-                  "Risk assessment and mitigation"
+                  "Monitoring enforcement outcomes",
+                  "Tracking sentencing patterns",
+                  "Public education on fraud"
                 ]
               },
               {
                 org: "🎓 Researchers & Academics",
                 uses: [
                   "Studying fraud conviction patterns",
-                  "Analyzing sentencing trends",
-                  "Publishing research and papers"
+                  "Analysing sentencing outcomes",
+                  "Citing a documented dataset"
                 ]
               }
             ].map((item, idx) => (
@@ -133,9 +134,9 @@ const AboutPage = ({ isDark }) => {
         {/* Team/Organization */}
         <div className={`p-12 rounded-2xl border text-center mb-20 ${cardBgClass}`}>
           <Users className="w-16 h-16 mx-auto text-blue-500 mb-6" />
-          <h2 className={`text-3xl font-bold ${headingClass} mb-4`}>Our Team</h2>
+          <h2 className={`text-3xl font-bold ${headingClass} mb-4`}>Who runs FraudCheckr</h2>
           <p className={`${textSecondaryClass} max-w-2xl mx-auto`}>
-            FraudCheckr is built and maintained by a dedicated team of software engineers, data specialists, and legal experts committed to transparency and accountability. We work closely with federal court records and civil society organizations to ensure data accuracy and integrity.
+            FraudCheckr is built and operated by {OPERATORS}.
           </p>
         </div>
 
@@ -144,28 +145,16 @@ const AboutPage = ({ isDark }) => {
           <h2 className={`text-4xl font-bold ${headingClass} text-center mb-12`}>Data & Sources</h2>
           <div className={`p-8 rounded-2xl border ${cardBgClass}`}>
             <p className={`${textSecondaryClass} mb-6`}>
-              All conviction records in FraudCheckr are sourced from:
+              FraudCheckr has one source:
             </p>
             <ul className={`space-y-4 ${textSecondaryClass}`}>
               <li className="flex gap-3">
                 <span className="text-blue-500 font-bold">•</span>
-                <span><strong>Official EFCC Records</strong> - Verified conviction data from the Economic and Financial Crimes Commission</span>
-              </li>
-              <li className="flex gap-3">
-                <span className="text-blue-500 font-bold">•</span>
-                <span><strong>Court Proceedings</strong> - Public court documents from Federal High Courts across Nigeria</span>
-              </li>
-              <li className="flex gap-3">
-                <span className="text-blue-500 font-bold">•</span>
-                <span><strong>Legal Publications</strong> - Verified through official legal and regulatory publications</span>
-              </li>
-              <li className="flex gap-3">
-                <span className="text-blue-500 font-bold">•</span>
-                <span><strong>Public Records</strong> - All data is obtained from publicly available sources</span>
+                <span><strong>EFCC Narrative of Convictions, {FACTS.yearsLabel}</strong>: the yearly tables in which the Economic and Financial Crimes Commission reports convictions it secured. They cover {FACTS.courts} Federal, State and FCT High Courts in {FACTS.placesLabel}.</span>
               </li>
             </ul>
             <p className={`${textSecondaryClass} mt-6`}>
-              FraudCheckr organizes and normalizes these public records for easier search and screening, but customers should verify critical decisions against official source documents and internal compliance policies.
+              We have not checked each record against court files. Records show what the EFCC reported at the time of conviction and may not reflect later appeals. Before relying on a record about a particular person, confirm it with the court registry.
             </p>
           </div>
         </div>
@@ -176,9 +165,9 @@ const AboutPage = ({ isDark }) => {
           <div className="grid md:grid-cols-4 gap-6">
             {[
               { title: "Transparency", desc: "Open access to public information" },
-              { title: "Accuracy", desc: "Verified and fact-checked data" },
-              { title: "Privacy", desc: "Secure and responsible data handling" },
-              { title: "Accessibility", desc: "Free tools for legitimate research" }
+              { title: "Accuracy", desc: "Faithful to the source, with problems flagged" },
+              { title: "Fairness", desc: "Corrections and context for people named" },
+              { title: "Accessibility", desc: "Free search for everyone" }
             ].map((value, idx) => (
               <div key={idx} className={`text-center`}>
                 <h3 className={`text-xl font-bold ${headingClass} mb-2`}>{value.title}</h3>
@@ -192,7 +181,7 @@ const AboutPage = ({ isDark }) => {
         <div className={`bg-blue-600/20 border ${isDark ? "border-blue-700/30" : "border-blue-300/30"} p-12 rounded-2xl text-center`}>
           <h2 className={`text-3xl font-bold ${headingClass} mb-4`}>Ready to Explore?</h2>
           <p className={`${textSecondaryClass} mb-8 max-w-2xl mx-auto`}>
-            Start searching public conviction records today. Our database contains over 864 verified cases across 33 Federal Courts.
+            Search {FACTS.recordsLabel} conviction records from {FACTS.courts} courts in {FACTS.placesLabel}.
           </p>
           <div className="flex flex-wrap justify-center gap-4">
             <a href="/search?name=" className="px-8 py-3 bg-blue-600 text-white font-semibold rounded-lg hover:bg-blue-700 transition">

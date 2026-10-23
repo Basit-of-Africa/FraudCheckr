@@ -149,7 +149,7 @@ function App() {
                   © 2026 FraudCheckr. All rights reserved.
                 </p>
                 <p className={`text-xs mt-4 md:mt-0 ${isDark ? "text-gray-500" : "text-gray-500"}`}>
-                  Providing transparent access to public fraud conviction records from Nigeria's federal courts
+                  Searchable fraud conviction records published by Nigeria's EFCC. Independent; not affiliated with the EFCC.
                 </p>
               </div>
             </div>

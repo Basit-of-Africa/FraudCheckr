@@ -939,7 +939,7 @@ class DeveloperPlatform:
                 "name": "Business",
                 "price_kobo": int(os.getenv("DEVELOPER_API_BUSINESS_PLAN_AMOUNT_KOBO", "1500000")),
                 "currency": "NGN",
-                "description": "Higher-usage plan for growing compliance teams.",
+                "description": "Higher-usage plan for newsrooms, research teams and civic-tech projects.",
                 "api_call_quota": 10000,
                 "report_quota": 250,
                 "export_enabled": True,
@@ -947,7 +947,7 @@ class DeveloperPlatform:
                 "feature_list": [
                     "Higher monthly API and report quotas",
                     "Priority support and usage analytics",
-                    "Built for teams and mid-market compliance workflows",
+                    "Built for teams with regular, higher-volume use",
                 ],
                 "is_free": False,
             },

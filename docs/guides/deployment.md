@@ -200,7 +200,7 @@ services:
     environment:
       - DEBUG=False
     volumes:
-      - ./efcc_convictions.csv:/app/efcc_convictions.csv
+      - ./data/convictions.csv:/app/data/convictions.csv
 
   frontend:
     build:
@@ -312,7 +312,7 @@ logging.basicConfig(
 
 ```bash
 # Backup CSV data
-0 2 * * * tar -czf /backups/efcc-$(date +\%Y\%m\%d).tar.gz /app/efcc_convictions.csv
+0 2 * * * tar -czf /backups/efcc-$(date +\%Y\%m\%d).tar.gz /app/data/convictions.csv
 
 # Backup database
 0 3 * * * pg_dump efcc_convictions > /backups/db-$(date +\%Y\%m\%d).sql

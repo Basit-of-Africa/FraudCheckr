@@ -45,7 +45,7 @@ Overview of the EFCC Convictions Explorer system design and components.
 │  ┌──────────────────────────────────────────────────┐        │
 │  │         CSV Data Storage (Pandas)               │        │
 │  │                                                  │        │
-│  │  efcc_convictions.csv (864 records)            │        │
+│  │  data/convictions.csv (canonical dataset)       │        │
 │  └──────────────────────────────────────────────────┘        │
 │                                                               │
 └─────────────────────────────────────────────────────────────┘
@@ -81,7 +81,7 @@ Overview of the EFCC Convictions Explorer system design and components.
 **Main Files:**
 - `main.py` - API endpoints and server
 - `models.py` - Pydantic data models
-- `data_cleaning.py` - Data processing utilities
+- `dataset.py` - Loads the canonical dataset; `scripts/build_dataset.py` builds it
 
 **Endpoints:**
 ```
@@ -111,8 +111,8 @@ GET  /stats         - Get statistics
 
 **Current:**
 - CSV file (in-memory Pandas DataFrame)
-- Location: `efcc_convictions.csv`
-- Size: ~864 records
+- Location: `data/convictions.csv`
+- Size: about 7,900 records
 - Format: name, offense, prison_term, fine, restitution, court
 
 **Future:**
@@ -173,7 +173,7 @@ API Ready to Receive Requests
 
 ### Current Limitations
 
-- **Memory-based**: All data in RAM (fine for 864 records)
+- **Memory-based**: All data in RAM (fine at this size)
 - **Single-threaded**: No parallelization
 - **No caching**: Every request processed fresh
 - **No indexing**: Linear search through data

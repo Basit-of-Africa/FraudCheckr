@@ -5,6 +5,7 @@ import Loader from "../components/Loader";
 import EmptyState from "../components/EmptyState";
 import { BarChart3, Briefcase, Scale, TrendingUp } from "lucide-react";
 import { getApiBaseUrl } from "../lib/api";
+import { FACTS } from "../lib/facts";
 
 const InsightsPage = ({ isDark }) => {
   const [stats, setStats] = useState(null);
@@ -58,7 +59,7 @@ const InsightsPage = ({ isDark }) => {
             Conviction Intelligence
           </h1>
           <p className={`text-xl ${isDark ? "text-gray-400" : "text-gray-600"}`}>
-            Deep dive into Nigeria's fraud conviction data and trends
+            Patterns across {FACTS.recordsLabel} convictions reported by the EFCC for {FACTS.yearsLabel}
           </p>
         </div>
 
@@ -73,11 +74,11 @@ const InsightsPage = ({ isDark }) => {
                   <div className={`w-14 h-14 rounded-xl flex items-center justify-center mb-4 ${isDark ? "bg-blue-500/20" : "bg-blue-100"}`}>
                     <Scale className={`w-7 h-7 ${isDark ? "text-blue-400" : "text-blue-600"}`} />
                   </div>
-                  <p className={`text-sm mb-2 ${isDark ? "text-gray-400" : "text-gray-600"}`}>Total Convictions</p>
+                  <p className={`text-sm mb-2 ${isDark ? "text-gray-400" : "text-gray-600"}`}>Conviction records</p>
                   <p className={`text-4xl font-bold mb-2 ${isDark ? "text-white" : "text-gray-900"}`}>
                     {stats.total_cases}
                   </p>
-                  <p className={`text-xs ${isDark ? "text-gray-500" : "text-gray-600"}`}>Verified cases</p>
+                  <p className={`text-xs ${isDark ? "text-gray-500" : "text-gray-600"}`}>One per defendant, as reported by the EFCC</p>
                 </div>
               </div>
 
@@ -88,11 +89,11 @@ const InsightsPage = ({ isDark }) => {
                   <div className={`w-14 h-14 rounded-xl flex items-center justify-center mb-4 ${isDark ? "bg-purple-500/20" : "bg-purple-100"}`}>
                     <Briefcase className={`w-7 h-7 ${isDark ? "text-purple-400" : "text-purple-600"}`} />
                   </div>
-                  <p className={`text-sm mb-2 ${isDark ? "text-gray-400" : "text-gray-600"}`}>Offense Types</p>
+                  <p className={`text-sm mb-2 ${isDark ? "text-gray-400" : "text-gray-600"}`}>Offence categories</p>
                   <p className={`text-4xl font-bold mb-2 ${isDark ? "text-white" : "text-gray-900"}`}>
                     {stats.unique_offenses}
                   </p>
-                  <p className={`text-xs ${isDark ? "text-gray-500" : "text-gray-600"}`}>Distinct charges</p>
+                  <p className={`text-xs ${isDark ? "text-gray-500" : "text-gray-600"}`}>Spelling variants grouped</p>
                 </div>
               </div>
 
@@ -103,11 +104,11 @@ const InsightsPage = ({ isDark }) => {
                   <div className={`w-14 h-14 rounded-xl flex items-center justify-center mb-4 ${isDark ? "bg-green-500/20" : "bg-green-100"}`}>
                     <BarChart3 className={`w-7 h-7 ${isDark ? "text-green-400" : "text-green-600"}`} />
                   </div>
-                  <p className={`text-sm mb-2 ${isDark ? "text-gray-400" : "text-gray-600"}`}>Federal Courts</p>
+                  <p className={`text-sm mb-2 ${isDark ? "text-gray-400" : "text-gray-600"}`}>Courts</p>
                   <p className={`text-4xl font-bold mb-2 ${isDark ? "text-white" : "text-gray-900"}`}>
                     {stats.unique_courts}
                   </p>
-                  <p className={`text-xs ${isDark ? "text-gray-500" : "text-gray-600"}`}>Jurisdictions</p>
+                  <p className={`text-xs ${isDark ? "text-gray-500" : "text-gray-600"}`}>Federal, State and FCT High Courts</p>
                 </div>
               </div>
 
@@ -118,34 +119,34 @@ const InsightsPage = ({ isDark }) => {
                   <div className={`w-14 h-14 rounded-xl flex items-center justify-center mb-4 ${isDark ? "bg-orange-500/20" : "bg-orange-100"}`}>
                     <TrendingUp className={`w-7 h-7 ${isDark ? "text-orange-400" : "text-orange-600"}`} />
                   </div>
-                  <p className={`text-sm mb-2 ${isDark ? "text-gray-400" : "text-gray-600"}`}>Avg Sentence</p>
+                  <p className={`text-sm mb-2 ${isDark ? "text-gray-400" : "text-gray-600"}`}>Average custodial term</p>
                   <p className={`text-4xl font-bold mb-2 ${isDark ? "text-white" : "text-gray-900"}`}>
                     {stats.average_prison_term_months
-                      ? Math.round(stats.average_prison_term_months / 12)
+                      ? Math.round(stats.average_prison_term_months)
                       : "N/A"}{" "}
-                    <span className="text-xl">yrs</span>
+                    <span className="text-xl">months</span>
                   </p>
-                  <p className={`text-xs ${isDark ? "text-gray-500" : "text-gray-600"}`}>Average prison term</p>
+                  <p className={`text-xs ${isDark ? "text-gray-500" : "text-gray-600"}`}>Where a custodial term was imposed; many carried an option of fine</p>
                 </div>
               </div>
             </div>
 
             {/* Most Common Offense */}
-            <div className="bg-slate-800 p-8 rounded-2xl border border-slate-700 mb-16">
-              <h2 className="text-2xl font-bold text-white mb-6">
-                Most Common Offense
+            <div className={`p-8 rounded-2xl border mb-16 ${isDark ? "bg-slate-800 border-slate-700" : "bg-gray-50 border-gray-200"}`}>
+              <h2 className={`text-2xl font-bold mb-6 ${isDark ? "text-white" : "text-gray-900"}`}>
+                Most Common Offence
               </h2>
               <div className="flex items-center gap-6">
                 <div className={`w-20 h-20 rounded-2xl flex items-center justify-center ${isDark ? "bg-red-500/20" : "bg-red-100"}`}>
                   <span className="text-4xl">⚖️</span>
                 </div>
                 <div>
-                  <p className={`mb-2 ${isDark ? "text-gray-400" : "text-gray-600"}`}>Leading Charge Type</p>
+                  <p className={`mb-2 ${isDark ? "text-gray-400" : "text-gray-600"}`}>Leading offence category</p>
                   <p className={`text-4xl font-bold ${isDark ? "text-white" : "text-gray-900"}`}>
                     {stats.most_common_offense}
                   </p>
                   <p className={`mt-2 ${isDark ? "text-gray-500" : "text-gray-600"}`}>
-                    Most frequently prosecuted offense in fraud records
+                    The offence category with the most convictions in the dataset
                   </p>
                 </div>
               </div>
@@ -155,27 +156,26 @@ const InsightsPage = ({ isDark }) => {
             <div className="grid md:grid-cols-2 gap-6">
               <div className={`p-8 rounded-2xl border ${isDark ? "bg-blue-900/20 border-blue-700/30" : "bg-blue-50 border-blue-200"}`}>
                 <h3 className={`text-xl font-bold mb-4 ${isDark ? "text-white" : "text-gray-900"}`}>
-                  Conviction Coverage
+                  Coverage
                 </h3>
                 <p className={`mb-4 ${isDark ? "text-gray-300" : "text-gray-600"}`}>
-                  Our database contains comprehensive conviction records spanning multiple years, covering fraud cases processed through various federal courts across Nigeria.
+                  The dataset holds every conviction listed in the EFCC's Narrative of Convictions tables for {FACTS.yearsLabel}. It covers convictions the EFCC secured, not every fraud case in Nigeria.
                 </p>
                 <div className={`font-semibold ${isDark ? "text-blue-400" : "text-blue-600"}`}>
-                  {stats.total_cases} verified records
+                  {stats.total_cases.toLocaleString("en-NG")} records
                 </div>
               </div>
 
               <div className={`p-8 rounded-2xl border ${isDark ? "bg-purple-900/20 border-purple-700/30" : "bg-purple-50 border-purple-200"}`}>
                 <h3 className={`text-xl font-bold mb-4 ${isDark ? "text-white" : "text-gray-900"}`}>
-                  Offense Diversity
+                  Offences
                 </h3>
                 <p className={`mb-4 ${isDark ? "text-gray-300" : "text-gray-600"}`}>
-                  Convictions span {stats.unique_offenses} different offense types,
-                  from cyber crimes to embezzlement. The variation shows the wide
-                  scope of federal fraud prosecution activities.
+                  Offences recorded in hundreds of different ways are grouped into {stats.unique_offenses} categories,
+                  from impersonation and cybercrime to money laundering and illegal oil dealing.
                 </p>
                 <div className={`font-semibold ${isDark ? "text-purple-400" : "text-purple-600"}`}>
-                  {stats.unique_offenses} distinct offense types
+                  {stats.unique_offenses} offence categories
                 </div>
               </div>
 
@@ -184,12 +184,11 @@ const InsightsPage = ({ isDark }) => {
                   Jurisdictional Spread
                 </h3>
                 <p className={`mb-4 ${isDark ? "text-gray-300" : "text-gray-600"}`}>
-                  Cases are distributed across {stats.unique_courts} Federal High
-                  Courts nationwide, reflecting federal prosecution activities throughout Nigeria's
-                  federal judicial system.
+                  Convictions came from {stats.unique_courts} identified Federal, State and FCT High Courts
+                  in {FACTS.placesLabel}.
                 </p>
                 <div className={`font-semibold ${isDark ? "text-green-400" : "text-green-600"}`}>
-                  {stats.unique_courts} federal courts involved
+                  {stats.unique_courts} courts
                 </div>
               </div>
 
@@ -198,15 +197,14 @@ const InsightsPage = ({ isDark }) => {
                   Sentencing Patterns
                 </h3>
                 <p className={`mb-4 ${isDark ? "text-gray-300" : "text-gray-600"}`}>
-                  The average prison sentence reflects the seriousness with which
-                  fraud crimes are prosecuted, indicating substantial custodial
-                  penalties for convicted offenders.
+                  This is the average of the longest custodial term in each sentence that had one.
+                  Many sentences also allowed a fine instead of prison, so it is not the time actually served.
                 </p>
                 <div className={`font-semibold ${isDark ? "text-orange-400" : "text-orange-600"}`}>
                   {stats.average_prison_term_months
-                    ? Math.round(stats.average_prison_term_months / 12)
+                    ? Math.round(stats.average_prison_term_months)
                     : "N/A"}{" "}
-                  years average
+                  months average
                 </div>
               </div>
             </div>

@@ -50,7 +50,7 @@ const codeExamples = [
   },
   {
     id: "search",
-    title: "Run a paid background-check search",
+    title: "Run a name-match report",
     code: `curl "https://your-backend-origin/developer/v1/search?name=JOHN%20DOE" \\
   -H "X-API-Key: fchk_live_your_api_key"`,
   },
@@ -134,13 +134,13 @@ const DeveloperPage = ({ isDark }) => {
                 FraudCheckr Developer API
               </p>
               <h1 className={`text-4xl md:text-5xl font-bold mb-4 ${headingClass}`}>
-                Build KYC and background-check workflows on conviction data
+                Research API for the EFCC conviction dataset
               </h1>
               <p className={`text-lg leading-8 max-w-3xl ${mutedTextClass}`}>
-                FraudCheckr exposes a paid developer API for screening names against
-                public conviction records. The public website remains open for browsing,
-                while the developer API is gated behind account creation, Paystack
-                payment, and issued API keys.
+                Programmatic access to the same records as the public site, for newsrooms,
+                researchers and civic-tech teams. Every record carries its charge number,
+                conviction date, source table and quality flags. The website stays free;
+                the API needs an account, a plan paid through Paystack, and an API key.
               </p>
               <div className="mt-6 flex flex-wrap gap-3">
                 <Link
@@ -166,10 +166,10 @@ const DeveloperPage = ({ isDark }) => {
 
             <section className="grid md:grid-cols-2 gap-6">
               {[
-                "Name-based conviction screening for onboarding and KYC",
-                "Server-to-server API access with issued API keys",
-                "Paystack-gated subscription flow for developer access",
-                "Search, offense, court, conviction list, and stats endpoints",
+                "Search, offence, court, conviction list and statistics endpoints",
+                "Stable record IDs and source references for citation",
+                "Name-match reports that list possible matches for manual review",
+                "Server-to-server access with issued API keys",
               ].map((item) => (
                 <div key={item} className={`rounded-2xl border p-6 ${panelClass}`}>
                   <div className="flex items-start gap-3">
@@ -264,9 +264,8 @@ DEVELOPER_API_PLAN_AMOUNT_KOBO=500000`}</pre>
             <h1 className={`text-4xl font-bold ${headingClass}`}>Pricing</h1>
             <div className={`rounded-2xl border p-6 ${panelClass}`}>
               <p className={`leading-7 ${mutedTextClass}`}>
-                Choose the plan that fits your compliance workflow. Plans are loaded
-                dynamically from the backend so the frontend always reflects current
-                pricing and included capabilities.
+                Choose the plan that fits your usage. Prices and limits below are
+                the current ones.
               </p>
             </div>
             {plansLoading ? (
@@ -377,22 +376,23 @@ DEVELOPER_API_PLAN_AMOUNT_KOBO=500000`}</pre>
       case "notes":
         return (
           <div className="space-y-6">
-            <h1 className={`text-4xl font-bold ${headingClass}`}>Product Notes</h1>
+            <h1 className={`text-4xl font-bold ${headingClass}`}>Appropriate use</h1>
             <div className={`rounded-2xl border p-6 ${panelClass}`}>
               <p className={`leading-7 ${mutedTextClass}`}>
-                FraudCheckr is best positioned today as a conviction-screening signal
-                for internal risk reviews, onboarding checks, and manual investigation
-                support. It is not yet a full identity-verification platform, watchlist
-                product, or sanctions engine.
+                FraudCheckr matches on names only. The EFCC's tables do not include dates
+                of birth or ID numbers, so a match cannot show that a record is about a
+                particular person. Use results as leads for research, not as a basis for
+                decisions about individuals. FraudCheckr is not an identity-verification,
+                background-check, watchlist or sanctions service.
               </p>
             </div>
             <div className={`rounded-2xl border p-6 ${panelClass}`}>
-              <h2 className={`text-2xl font-semibold mb-3 ${headingClass}`}>What to add next</h2>
+              <h2 className={`text-2xl font-semibold mb-3 ${headingClass}`}>If you use the data</h2>
               <ul className={`space-y-3 leading-7 ${mutedTextClass}`}>
-                <li>Rate limiting and per-key quotas</li>
-                <li>Usage analytics and invoices in the developer dashboard</li>
-                <li>Webhook retries and payment reconciliation tools</li>
-                <li>Structured person records beyond raw conviction search</li>
+                <li>Do not decide anything about a person (hiring, lending, tenancy, onboarding) from a name match alone.</li>
+                <li>Confirm any record you rely on with the court, using its charge number, court and date.</li>
+                <li>Show quality flags and the source reference wherever you display a record.</li>
+                <li>Pass on corrections: if we change or remove a record, update your copy.</li>
               </ul>
             </div>
           </div>

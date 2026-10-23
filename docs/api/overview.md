@@ -98,7 +98,7 @@ Access interactive API documentation:
 
 ```json
 {
-  "total": 7788,
+  "total": 7876,
   "limit": 10,
   "offset": 0,
   "data": [
@@ -111,7 +111,7 @@ Access interactive API documentation:
 
 ```json
 {
-  "total_cases": 7788,
+  "total_cases": 7876,
   "most_common_offense": "CYBERCRIME",
   "average_prison_term_months": 45.2,
   "unique_courts": 33,

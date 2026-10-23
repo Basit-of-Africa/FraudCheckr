@@ -1,202 +1,121 @@
 import React from "react";
-import { Shield, Lock, Eye, AlertCircle } from "lucide-react";
+import { Lock } from "lucide-react";
+import LegalDocument from "../components/LegalDocument";
+import { FACTS, OPERATORS } from "../lib/facts";
 
-const PrivacyPage = ({ isDark }) => {
-  const headingClass = isDark ? "text-white" : "text-gray-900";
-  const textSecondaryClass = isDark ? "text-gray-400" : "text-gray-600";
-  const bgClass = isDark ? "bg-slate-800" : "bg-gray-50";
-  const borderClass = isDark ? "border-slate-700" : "border-gray-200";
+const UPDATED = "23 October 2026";
 
-  return (
-    <div className={`min-h-screen py-20 px-4 transition-colors ${isDark ? "bg-slate-900" : "bg-white"}`}>
-      <div className="max-w-4xl mx-auto">
-        {/* Header */}
-        <div className="mb-12">
-          <div className="flex items-center gap-3 mb-4">
-            <Lock className="w-8 h-8 text-blue-500" />
-            <h1 className={`text-4xl md:text-5xl font-bold ${headingClass}`}>
-              Privacy Policy
-            </h1>
-          </div>
-          <p className={`text-lg ${textSecondaryClass}`}>
-            Last Updated: March 30, 2026
-          </p>
-        </div>
-
-        {/* Content */}
-        <div className="space-y-8">
-          {/* Introduction */}
-          <section>
-            <h2 className={`text-2xl font-bold ${headingClass} mb-4`}>
-              Introduction
-            </h2>
-            <p className={textSecondaryClass}>
-              FraudCheckr ("we", "us", "our") is committed to protecting your privacy. This Privacy Policy explains how we collect, use, disclose, and safeguard your information when you visit our website and use our services.
-            </p>
-          </section>
-
-          {/* Data Collection */}
-          <section className={`p-6 rounded-lg border ${bgClass} ${borderClass}`}>
-            <h2 className={`text-2xl font-bold ${headingClass} mb-4 flex items-center gap-2`}>
-              <Eye className="w-6 h-6 text-blue-500" />
-              1. Information We Collect
-            </h2>
-            <div className="space-y-4">
-              <div>
-                <h3 className={`font-semibold ${headingClass} mb-2`}>
-                  Automatically Collected Information
-                </h3>
-                <ul className={`space-y-2 ${textSecondaryClass}`}>
-                  <li>• IP address and device information</li>
-                  <li>• Browser type, version, and operating system</li>
-                  <li>• Pages visited and time spent on each page</li>
-                  <li>• Referring URL and exit page</li>
-                  <li>• Search queries and filters used</li>
-                </ul>
-              </div>
-              <div>
-                <h3 className={`font-semibold ${headingClass} mb-2`}>
-                  Voluntarily Provided Information
-                </h3>
-                <ul className={`space-y-2 ${textSecondaryClass}`}>
-                  <li>• Contact form submissions</li>
-                  <li>• API subscription details (for paid users)</li>
-                  <li>• Feedback and support requests</li>
-                </ul>
-              </div>
-            </div>
-          </section>
-
-          {/* Data Usage */}
-          <section className={`p-6 rounded-lg border ${bgClass} ${borderClass}`}>
-            <h2 className={`text-2xl font-bold ${headingClass} mb-4`}>
-              2. How We Use Your Information
-            </h2>
-            <ul className={`space-y-3 ${textSecondaryClass}`}>
-              <li>✓ Provide, maintain, and improve our services</li>
-              <li>✓ Process API subscriptions and payments</li>
-              <li>✓ Send technical updates and support communications</li>
-              <li>✓ Monitor usage patterns to optimize performance</li>
-              <li>✓ Comply with legal obligations</li>
-              <li>✓ Prevent fraud and security issues</li>
-            </ul>
-          </section>
-
-          {/* Data Protection */}
-          <section className={`p-6 rounded-lg border ${bgClass} ${borderClass}`}>
-            <h2 className={`text-2xl font-bold ${headingClass} mb-4 flex items-center gap-2`}>
-              <Shield className="w-6 h-6 text-green-500" />
-              3. Data Protection & Security
-            </h2>
-            <p className={`${textSecondaryClass} mb-4`}>
-              We implement comprehensive security measures to protect your information:
-            </p>
-            <ul className={`space-y-3 ${textSecondaryClass}`}>
-              <li>• HTTPS encryption for all transmitted data</li>
-              <li>• Secure database encryption at rest</li>
-              <li>• Regular security audits and penetration testing</li>
-              <li>• Limited access to personal information</li>
-              <li>• Strict employee confidentiality agreements</li>
-              <li>• Incident response procedures in place</li>
-            </ul>
-          </section>
-
-          {/* No Data Sharing */}
-          <section className={`p-6 rounded-lg border ${bgClass} ${borderClass}`}>
-            <h2 className={`text-2xl font-bold ${headingClass} mb-4`}>
-              4. Data Sharing & Third Parties
-            </h2>
-            <p className={`${textSecondaryClass}`}>
-              We do <strong>NOT</strong> sell, rent, or trade your personal information. We only share information:
-            </p>
-            <ul className={`space-y-3 mt-4 ${textSecondaryClass}`}>
-              <li>• With service providers (hosting, payment processing) under strict confidentiality agreements</li>
-              <li>• When required by law or legal process</li>
-              <li>• To protect against fraud or security threats</li>
-              <li>• With your explicit consent</li>
-            </ul>
-          </section>
-
-          {/* Cookies */}
-          <section className={`p-6 rounded-lg border ${bgClass} ${borderClass}`}>
-            <h2 className={`text-2xl font-bold ${headingClass} mb-4`}>
-              5. Cookies & Tracking Technologies
-            </h2>
-            <p className={`${textSecondaryClass} mb-4`}>
-              We use cookies for:
-            </p>
-            <ul className={`space-y-2 ${textSecondaryClass}`}>
-              <li>• Remembering user preferences (theme settings)</li>
-              <li>• Analyzing website usage (analytics only)</li>
-              <li>• Improving user experience</li>
-            </ul>
-            <p className={`${textSecondaryClass} mt-4`}>
-              You can disable cookies in your browser settings. This may impact functionality.
-            </p>
-          </section>
-
-          {/* User Rights */}
-          <section className={`p-6 rounded-lg border ${bgClass} ${borderClass}`}>
-            <h2 className={`text-2xl font-bold ${headingClass} mb-4`}>
-              6. Your Rights
-            </h2>
-            <p className={`${textSecondaryClass} mb-4`}>
-              You have the right to:
-            </p>
-            <ul className={`space-y-3 ${textSecondaryClass}`}>
-              <li>• Access personal information we hold about you</li>
-              <li>• Request correction of inaccurate data</li>
-              <li>• Request deletion of your data (where applicable)</li>
-              <li>• Opt-out of non-essential communications</li>
-              <li>• Export your data in a portable format</li>
-            </ul>
-            <p className={`${textSecondaryClass} mt-4`}>
-              Contact privacy@fraudcheckr.com to exercise these rights.
-            </p>
-          </section>
-
-          {/* CCPA/GDPR */}
-          <section className={`p-6 rounded-lg border ${bgClass} ${borderClass}`}>
-            <h2 className={`text-2xl font-bold ${headingClass} mb-4`}>
-              7. Global Privacy Compliance
-            </h2>
-            <p className={`${textSecondaryClass} mb-4`}>
-              <strong>GDPR (EU Users):</strong> We comply with GDPR requirements for European users. Your data is only processed with a lawful basis.
-            </p>
-            <p className={`${textSecondaryClass}`}>
-              <strong>CCPA (California Users):</strong> California residents have specific rights under CCPA. Visit our CCPA page for details.
-            </p>
-          </section>
-
-          {/* Changes to Policy */}
-          <section className={`p-6 rounded-lg border ${bgClass} ${borderClass}`}>
-            <h2 className={`text-2xl font-bold ${headingClass} mb-4`}>
-              8. Changes to This Policy
-            </h2>
-            <p className={`${textSecondaryClass}`}>
-              We may update this Privacy Policy periodically. We will notify you of significant changes via email or prominent notice on our website. Your continued use of FraudCheckr constitutes acceptance of the updated policy.
-            </p>
-          </section>
-
-          {/* Contact */}
-          <section className={`p-6 rounded-lg border border-blue-500/30 ${isDark ? "bg-blue-500/10" : "bg-blue-50"}`}>
-            <h2 className={`text-2xl font-bold ${headingClass} mb-4 flex items-center gap-2`}>
-              <AlertCircle className="w-6 h-6 text-blue-500" />
-              Questions About Privacy?
-            </h2>
-            <p className={textSecondaryClass}>
-              If you have questions about this Privacy Policy or our privacy practices, please contact us:
-            </p>
-            <div className={`mt-4 space-y-2 ${textSecondaryClass}`}>
-              <p><strong>Email:</strong> privacy@fraudcheckr.com</p>
-              <p><strong>Address:</strong> FraudCheckr Team, Lagos, Nigeria</p>
-              <p><strong>Response Time:</strong> We respond to privacy requests within 30 days</p>
-            </div>
-          </section>
-        </div>
-      </div>
-    </div>
-  );
-};
+const PrivacyPage = ({ isDark }) => (
+  <LegalDocument
+    isDark={isDark}
+    icon={Lock}
+    title="Privacy Policy"
+    updated={UPDATED}
+    intro={`This policy explains what personal data FraudCheckr processes, why, and what rights you have. It covers two groups of people: people who use FraudCheckr, and people named in the conviction records it publishes. It is written to meet the Nigeria Data Protection Act 2023 (NDPA).`}
+    sections={[
+      {
+        heading: "Who we are",
+        body: [
+          `FraudCheckr is operated jointly by ${OPERATORS} ("we", "us"). We decide together how and why personal data on FraudCheckr is processed, and we are jointly responsible for it as data controllers under the NDPA.`,
+          "For anything in this policy, or to exercise your rights, email privacy@fraudcheckr.com. Our address is FraudCheckr Team, Lagos, Nigeria.",
+        ],
+      },
+      {
+        heading: "People named in conviction records",
+        body: [
+          `FraudCheckr republishes conviction records from the Economic and Financial Crimes Commission's (EFCC) Narrative of Convictions tables for ${FACTS.yearsLabel}. We did not collect this information from the people named; it comes from the EFCC's publications.`,
+          "What we publish about each convicted person or organisation:",
+          {
+            list: [
+              "name and any recorded alias, and the names of co-defendants in the same case",
+              "charge number, offence, court, presiding judge, and the dates the charge was filed and the conviction made",
+              "the sentence as recorded, including any term, fine, restitution or forfeiture",
+              "the EFCC zone that reported the case, and the table and row the record came from",
+            ],
+          },
+          "What we deliberately do not publish, although it appears in the EFCC's tables: the names of complainants (who are often victims), the correctional facility where a person is held, and their expected date of release.",
+          "Why we publish it (lawful basis): legitimate interests (NDPA section 25(1)(b)(v)). The interest is public accountability for the prosecution of financial crime: helping journalists, researchers and citizens find and analyse convictions the EFCC has already made public. We have weighed this against the interests of the people named. That is why we publish only what that purpose needs, show the source of every record, flag uncertain information, warn readers that a name match does not identify a person, and give people named a way to have records corrected, annotated or removed.",
+          "Although criminal-conviction information is not in the NDPA's list of sensitive personal data, we handle it with the same care.",
+          "How long we keep it: as long as the record remains relevant to public understanding of fraud prosecutions. We review records when someone asks us to, and remove or annotate them when, for example, a conviction is overturned on appeal. See the corrections process on our [Disclaimer page](/disclaimer#corrections).",
+        ],
+      },
+      {
+        heading: "People who use FraudCheckr",
+        body: [
+          "Searching and browsing: you do not need an account. Our hosting provider keeps technical logs for security and troubleshooting. These include your IP address, browser details, the time and the address of each page requested, which can include what you searched for. We keep these logs for no longer than 30 days. If request limits are switched on, we briefly keep a count of requests from each IP address to stop abuse. Lawful basis: legitimate interests in keeping the service secure and working.",
+          "Developer accounts: if you create one, we keep your email address, a securely hashed version of your password, sign-in sessions, your API keys (stored only in hashed form), your usage counts, and your subscription and payment references. Lawful basis: performance of our contract with you.",
+          "Name-match reports: when you run a report through the API, we save the name, aliases, location and reference you submit, together with the results, in your account so you can see them again. You are responsible for having a lawful reason to search for the people you look up. Lawful basis: performance of our contract with you.",
+          "Payments: Paystack processes payments. We never see or store your card details. We keep payment references, amounts and dates as tax and accounting law requires. Lawful basis: contract and legal obligation.",
+          "Contacting us: if you email us, we keep the correspondence for as long as needed to deal with it and any follow-up. Lawful basis: legitimate interests in answering you, or legal obligation where you are exercising your rights.",
+          "We delete developer account data within 12 months of an account being closed, except payment records we must keep for longer by law.",
+        ],
+      },
+      {
+        heading: "Cookies and browser storage",
+        body: [
+          "We do not use advertising or analytics cookies or trackers. Your browser stores your light/dark theme choice and, if you use the developer dashboard, your sign-in session and API key, so you stay signed in. You can clear these at any time in your browser settings.",
+        ],
+      },
+      {
+        heading: "Who we share data with",
+        body: [
+          "We do not sell personal data. We share it only with service providers that run FraudCheckr for us, under contracts that require them to protect it:",
+          {
+            list: [
+              "Vercel, which hosts the website and API",
+              "Neon, which hosts our database",
+              "Paystack, which processes payments",
+            ],
+          },
+          "We may also disclose data where the law requires it, or to establish, exercise or defend legal claims.",
+          "Some of these providers store data outside Nigeria. Where they do, we rely on the transfer safeguards the NDPA allows (sections 41 to 43), such as contractual protections.",
+        ],
+      },
+      {
+        heading: "Automated decisions",
+        body: [
+          "FraudCheckr does not make decisions about anyone. Name-match reports are produced automatically by comparing names, but they only list possible matches for a person to review. We tell users not to make decisions about individuals based on a name match alone.",
+        ],
+      },
+      {
+        heading: "Your rights",
+        body: [
+          "Under the NDPA you can ask us to:",
+          {
+            list: [
+              "tell you whether we hold data about you, give you a copy, and say where it came from",
+              "correct data that is inaccurate or incomplete",
+              "delete data, where there is no overriding reason to keep it",
+              "restrict how we use your data while a concern is looked into",
+              "stop processing your data, where we rely on legitimate interests and your situation outweighs them",
+              "give you data you provided to us in a portable format",
+              "withdraw consent, where we rely on it",
+            ],
+          },
+          "Email privacy@fraudcheckr.com. We may ask you to confirm your identity. We will respond within 30 days. If you are named in a record, quote its record ID; the [corrections process](/disclaimer#corrections) explains what happens next.",
+          "If you are unhappy with how we handle your data, you can complain to the Nigeria Data Protection Commission (ndpc.gov.ng). We would appreciate the chance to put things right first.",
+        ],
+      },
+      {
+        heading: "Security",
+        body: [
+          "All connections to FraudCheckr use HTTPS. Passwords and API keys are stored only in hashed form, and access to our systems is limited to the people who run the service. No system is perfectly secure. If a breach is likely to put people at risk, we will notify the Nigeria Data Protection Commission within 72 hours of becoming aware of it, and tell the people affected without undue delay.",
+        ],
+      },
+      {
+        heading: "Children",
+        body: [
+          "FraudCheckr is not intended for children under 18, and we do not knowingly collect their data through the website or API.",
+        ],
+      },
+      {
+        heading: "Changes to this policy",
+        body: [
+          "If we change this policy, we will update the date at the top. If the change is significant, we will also post a notice on the site and email developer account holders.",
+        ],
+      },
+    ]}
+  />
+);
 
 export default PrivacyPage;

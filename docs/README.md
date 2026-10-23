@@ -1,25 +1,25 @@
 # Nigeria's Fraud Conviction Records
 
-Welcome to the comprehensive documentation for the **Nigeria's Fraud Conviction Records** platform — a modern, full-stack application for searching, analyzing, and exploring fraud conviction records from Nigeria's federal courts.
+Welcome to the comprehensive documentation for the **Nigeria's Fraud Conviction Records** platform — a modern, full-stack application for searching, analyzing, and exploring the fraud conviction records published by Nigeria's EFCC (Narrative of Convictions, 2020–2024).
 
 ## 🎯 What is Nigeria's Fraud Conviction Records?
 
 Nigeria's Fraud Conviction Records is a powerful web application that provides:
 
-- **Searchable Database** - Access 7,788+ conviction records with detailed information
+- **Searchable Database** - Conviction records with charge numbers, dates, courts and sentences
 - **Advanced Filtering** - Filter by offense type, court, defendant name, and more
 - **Statistical Analytics** - View aggregate data about convictions, courts, offense patterns
 - **Modern UI** - User-friendly React dashboard for easy navigation
 - **RESTful API** - Robust backend API for programmatic access
-- **Data Quality** - Cleaned, standardized, and validated conviction data
+- **Data Quality** - Reproducible cleaning with per-record quality flags (see `data/README.md`)
 
 ## 📊 Key Statistics
 
-- **Total Records**: 7,788 convictions (2020-2024)
-- **Courts**: 33+ unique courts across Nigeria
-- **Offense Types**: 50+ different offense categories
-- **Data Coverage**: Complete fraud conviction records from Nigeria's federal courts
-- **Data Source**: Public court records and official proceedings (2020-2024)
+Current figures are generated with the dataset; see [`data/QUALITY_REPORT.md`](../data/QUALITY_REPORT.md).
+
+- **Source**: EFCC *Narrative of Convictions* tables, 2020–2024
+- **Courts**: Federal, State and FCT High Courts across Nigeria
+- **Coverage**: Convictions the EFCC listed in those tables, not every fraud case in Nigeria
 
 ## 🚀 Quick Links
 
@@ -71,7 +71,7 @@ This documentation covers:
 ## 🔐 Security & Privacy
 
 - No user authentication required for data access
-- Public fraud conviction records from Nigeria's federal courts
+- Fraud conviction records published by the EFCC
 - Data is read-only (no modifications to source data)
 - All personal information is from public records
 

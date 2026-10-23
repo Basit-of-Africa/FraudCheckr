@@ -2,7 +2,8 @@
 import React from "react";
 import { Link } from "react-router-dom";
 import SearchBar from "../components/SearchBar";
-import { Shield, Search, BarChart3, Lock, Zap, Globe } from "lucide-react";
+import { Search, BarChart3, Globe } from "lucide-react";
+import { FACTS } from "../lib/facts";
 
 const HomePage = ({ isDark }) => {
   return (
@@ -14,7 +15,7 @@ const HomePage = ({ isDark }) => {
             <p className={`text-sm font-semibold uppercase tracking-widest mb-4 ${
               isDark ? "text-blue-400" : "text-blue-600"
             }`}>
-              Powered by Public Records
+              From the EFCC's published conviction records
             </p>
             <h1 className={`text-5xl sm:text-6xl md:text-7xl font-bold tracking-tight mb-6 leading-tight ${
               isDark ? "text-white" : "text-gray-900"
@@ -24,7 +25,7 @@ const HomePage = ({ isDark }) => {
             <p className={`text-lg sm:text-xl leading-relaxed mb-12 max-w-2xl mx-auto ${
               isDark ? "text-gray-400" : "text-gray-600"
             }`}>
-              Access verified public fraud-conviction records from Nigeria's federal courts. Search, analyze, and stay informed with transparent data.
+              Search and explore fraud conviction records published by Nigeria's Economic and Financial Crimes Commission, covering convictions reported for {FACTS.yearsLabel}.
             </p>
             
             <div className="mb-16">
@@ -33,9 +34,9 @@ const HomePage = ({ isDark }) => {
 
             <div className="flex flex-wrap justify-center gap-6 text-sm">
               {[
-                { label: "7,788+ Records", icon: "📊" },
-                { label: "33+ Federal Courts", icon: "⚖️" },
-                { label: "Real-time Updated", icon: "⚡" }
+                { label: `${FACTS.recordsLabel} records`, icon: "📊" },
+                { label: `${FACTS.courts} courts`, icon: "⚖️" },
+                { label: `${FACTS.yearsLabel} EFCC tables`, icon: "📅" }
               ].map((stat, idx) => (
                 <div key={idx} className={`flex items-center gap-2 px-4 py-2 rounded-lg ${
                   isDark ? "bg-slate-800/50 text-gray-300" : "bg-gray-100 text-gray-700"
@@ -58,12 +59,12 @@ const HomePage = ({ isDark }) => {
             <h2 className={`text-4xl font-bold mb-4 ${
               isDark ? "text-white" : "text-gray-900"
             }`}>
-              Everything you need
+              What you can do
             </h2>
             <p className={`text-lg max-w-2xl mx-auto ${
               isDark ? "text-gray-400" : "text-gray-600"
             }`}>
-              Comprehensive tools to search, analyze, and understand fraud conviction patterns
+              Look up a name, read the record as the EFCC reported it, and explore patterns across the whole dataset
             </p>
           </div>
 
@@ -71,18 +72,18 @@ const HomePage = ({ isDark }) => {
             {[
               {
                 icon: Search,
-                title: "Smart Search",
-                description: "Find conviction records by defendant name with instant, accurate results"
+                title: "Search by name",
+                description: "Find records by defendant name or recorded alias. Partial names work."
               },
               {
                 icon: BarChart3,
-                title: "Deep Analytics",
-                description: "Explore trends, statistics, and patterns across the entire database"
+                title: "Explore patterns",
+                description: "See how convictions break down by offence, court and sentence across the dataset"
               },
               {
                 icon: Globe,
-                title: "Nationwide Coverage",
-                description: "Access records from 33+ Federal High Courts across Nigeria"
+                title: "Nationwide",
+                description: `Federal, State and FCT High Courts in ${FACTS.placesLabel}`
               }
             ].map((feature, idx) => {
               const Icon = feature.icon;
@@ -124,17 +125,17 @@ const HomePage = ({ isDark }) => {
               {
                 step: 1,
                 title: "Search",
-                description: "Enter a defendant's name to search our database of 864 verified conviction records"
+                description: `Enter a name to search ${FACTS.recordsLabel} conviction records`
               },
               {
                 step: 2,
-                title: "Review",
-                description: "View detailed case information including offense, court, sentence, and penalties"
+                title: "Check",
+                description: "Read the offence, court, charge number, date and sentence. A name alone does not identify a person; confirm details with the court."
               },
               {
                 step: 3,
                 title: "Analyze",
-                description: "Explore statistics, trends, and patterns in fraud convictions across Nigeria"
+                description: "Explore offences, courts and sentences across Nigeria"
               }
             ].map((item) => (
               <div key={item.step} className="text-center">
@@ -154,10 +155,10 @@ const HomePage = ({ isDark }) => {
         <div className="max-w-6xl mx-auto">
           <div className="grid md:grid-cols-4 gap-8">
             {[
-              { label: "Conviction Records", value: "7,788" },
-              { label: "Federal Courts", value: "33+" },
-              { label: "Offense Types", value: "50+" },
-              { label: "Years Covered", value: "2020-2024" }
+              { label: "Conviction records", value: FACTS.recordsLabel },
+              { label: "Courts", value: FACTS.courts },
+              { label: "Offence categories", value: FACTS.offenceCategories },
+              { label: "EFCC tables", value: FACTS.yearsLabel }
             ].map((stat, idx) => (
               <div key={idx} className="text-center">
                 <div className="text-4xl md:text-5xl font-bold text-blue-400 mb-2">
@@ -174,10 +175,10 @@ const HomePage = ({ isDark }) => {
       <div className={`py-20 px-4 ${isDark ? "" : "bg-white"}`}>
         <div className="max-w-4xl mx-auto text-center">
           <h2 className={`text-4xl font-bold mb-6 ${isDark ? "text-white" : "text-gray-900"}`}>
-            Ready to Access the Data?
+            Start exploring
           </h2>
           <p className={`text-xl mb-8 ${isDark ? "text-gray-400" : "text-gray-600"}`}>
-            Start exploring public conviction records today. Completely free and accessible to everyone.
+            Searching and browsing the records is free, with no account needed.
           </p>
           <div className="flex flex-wrap justify-center gap-4">
             <Link to="/search?name=" className="px-8 py-4 bg-blue-600 text-white font-semibold rounded-lg hover:bg-blue-700 hover:shadow-lg hover:shadow-blue-500/50 transition-all transform hover:scale-105">
@@ -200,24 +201,24 @@ const HomePage = ({ isDark }) => {
           <div className="space-y-4">
             {[
               {
-                q: "Is this data publicly available?",
-                a: "Yes, all conviction records shown here are public information from official court proceedings and source publications including the Economic and Financial Crimes Commission website."
+                q: "Where does the data come from?",
+                a: `From the conviction tables the EFCC publishes each year (Narrative of Convictions, ${FACTS.yearsLabel}). We clean and organise those tables but do not add records from other sources. FraudCheckr is independent and is not affiliated with the EFCC.`
               },
               {
-                q: "How often is the data updated?",
-                a: "Our database is updated regularly with new convictions. The current dataset covers convictions from 2020-2024 with ongoing updates as new cases are finalized."
+                q: "How current is the data?",
+                a: `It covers the EFCC tables for ${FACTS.yearsLabel}. We add new tables after the EFCC publishes them. A record shows the position at conviction and may not reflect a later appeal.`
               },
               {
-                q: "Can I download the data?",
-                a: "Currently, data can be viewed through our web interface. API access and bulk download features are coming soon."
+                q: "Can I use the data in my own work?",
+                a: "Yes. You can search and cite records on this site for free. Researchers and newsrooms that need programmatic access can use the API described on the Developers page."
               },
               {
-                q: "Is this information confidential?",
-                a: "No, this is public information from court records. However, we encourage responsible use of this data for legitimate purposes only."
+                q: "Does a matching name mean someone was convicted?",
+                a: "No. Many people share names. Before relying on a record about a particular person, match the charge number, court and date with the court registry. Never use a name match alone to make a decision about someone."
               },
               {
-                q: "What if I find incorrect information?",
-                a: "If you find discrepancies, please contact our support team. We cross-reference all data with official EFCC records."
+                q: "What if a record is wrong or about me?",
+                a: "Tell us using the contact details on the Contact page, quoting the record ID. We review every request and correct, annotate or remove records where that is warranted. The Disclaimer page explains the process."
               }
             ].map((faq, idx) => (
               <details key={idx} className={`group rounded-lg border p-6 cursor-pointer transition-colors ${isDark ? "bg-slate-800 border-slate-700 hover:border-slate-600" : "bg-white border-gray-200 hover:border-gray-300"}`}>
@@ -236,25 +237,25 @@ const HomePage = ({ isDark }) => {
       <div className={`py-20 px-4 ${isDark ? "" : "bg-white"}`}>
         <div className="max-w-4xl mx-auto">
           <h2 className={`text-4xl font-bold text-center mb-12 ${isDark ? "text-white" : "text-gray-900"}`}>
-            Trusted by Organizations Nationwide
+            Who it's for
           </h2>
           <p className={`text-center mb-12 ${isDark ? "text-gray-400" : "text-gray-600"}`}>
-            Used by journalists, researchers, compliance officers, and organizations seeking verified fraud conviction data
+            Built for public-interest research into financial crime in Nigeria
           </p>
 
           <div className="grid md:grid-cols-3 gap-8">
             {[
               {
                 org: "Media & Journalism",
-                uses: "Investigative reporting and fact-checking"
+                uses: "Reporting and fact-checking on fraud prosecutions"
               },
               {
-                org: "Compliance & Risk",
-                uses: "Due diligence and background verification"
+                org: "Civil society",
+                uses: "Monitoring enforcement and sentencing outcomes"
               },
               {
                 org: "Research & Academia",
-                uses: "Fraud studies and trend analysis"
+                uses: "Studying offences, courts and sentencing trends"
               }
             ].map((item, idx) => (
               <div key={idx} className={`p-8 rounded-lg border ${isDark ? "bg-slate-800 border-slate-700" : "bg-gray-50 border-gray-200"}`}>
