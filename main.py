@@ -7,7 +7,6 @@ A REST API for searching and analyzing fraud conviction records.
 import os
 import json
 import logging
-from difflib import SequenceMatcher
 from pathlib import Path
 from contextlib import asynccontextmanager
 import pandas as pd
@@ -40,6 +39,7 @@ from models import (
     HealthResponse,
 )
 from dataset import CANONICAL_PATH, load_canonical_records
+from name_matching import NameIndex, NameMatch, match_tokens, name_tokens
 from developer_platform import (
     DeveloperPlatform,
     default_plan_amount_kobo,
@@ -329,26 +329,17 @@ def normalize_screening_value(value: str | None) -> str:
     return " ".join((value or "").strip().upper().split())
 
 
-def score_name_match(candidate_name: str, query_name: str) -> tuple[str, float, str]:
-    normalized_candidate = normalize_screening_value(candidate_name)
-    normalized_query = normalize_screening_value(query_name)
+MATCH_RANK = {"exact": 0, "strong": 1, "possible": 2, "weak": 3}
 
-    if not normalized_candidate or not normalized_query:
-        return "weak", 0.0, "Insufficient name data for a meaningful match"
+_name_index: NameIndex | None = None
 
-    if normalized_candidate == normalized_query:
-        return "exact", 1.0, "Exact normalized full-name match"
 
-    if normalized_query in normalized_candidate or normalized_candidate in normalized_query:
-        return "possible", 0.9, "Strong partial name overlap after normalization"
-
-    ratio = SequenceMatcher(None, normalized_candidate, normalized_query).ratio()
-    if ratio >= 0.85:
-        return "possible", round(ratio, 2), "High fuzzy similarity on normalized name"
-    if ratio >= 0.7:
-        return "weak", round(ratio, 2), "Moderate fuzzy similarity on normalized name"
-
-    return "weak", round(ratio, 2), "Low fuzzy similarity on normalized name"
+def get_name_index() -> NameIndex:
+    """Name index over the loaded records, rebuilt whenever the records are reloaded."""
+    global _name_index
+    if _name_index is None or _name_index.records is not convictions_data:
+        _name_index = NameIndex(convictions_data)
+    return _name_index
 
 
 def build_screening_report(
@@ -358,62 +349,81 @@ def build_screening_report(
     location: str | None,
     limit: int,
 ) -> dict:
-    search_terms = [query_name, *aliases]
+    """
+    Find records whose names could belong to the person searched.
+
+    Matching is by name only (see name_matching.py), so every result is a lead
+    for human review, never a finding that the record is about this person.
+    """
+    search_terms = [t for t in [query_name, *aliases] if t and t.strip()]
+    term_tokens = [(t, name_tokens(t)) for t in search_terms]
+    single_name_query = all(len(tokens) <= 1 for _t, tokens in term_tokens)
+    normalized_location = normalize_screening_value(location)
     ranked_matches: list[dict] = []
 
-    for record in convictions_data:
-        best_match_type = "weak"
-        best_confidence = 0.0
-        best_reason = "No meaningful name similarity"
+    index = get_name_index()
+    candidate_ids = index.candidates([tok for _t, tokens in term_tokens for tok in tokens])
 
-        for term in search_terms:
-            match_type, confidence, reason = score_name_match(record.get("name", ""), term)
-            if confidence > best_confidence:
-                best_match_type = match_type
-                best_confidence = confidence
-                best_reason = reason
-
-        if best_confidence < 0.7:
+    for i in candidate_ids:
+        record = index.records[i]
+        best: NameMatch | None = None
+        best_pair = ("", "")
+        for term, q_tokens in term_tokens:
+            for recorded, c_tokens in index.names[i]:
+                result = match_tokens(q_tokens, c_tokens)
+                if result and (
+                    best is None
+                    or (MATCH_RANK[result.match_type], -result.confidence) < (MATCH_RANK[best.match_type], -best.confidence)
+                ):
+                    best, best_pair = result, (term, recorded)
+        if best is None:
             continue
 
-        if location:
-            normalized_location = normalize_screening_value(location)
-            normalized_court = normalize_screening_value(
-                " ".join(
-                    filter(None, (record.get("court"), record.get("court_as_recorded"), record.get("court_state")))
-                )
+        confidence = best.confidence
+        reason = best.reason
+        if best_pair[1] != record.get("name", ""):
+            reason += f" (matched recorded alias {best_pair[1]})"
+        if normalized_location:
+            court_text = normalize_screening_value(
+                " ".join(filter(None, (record.get("court"), record.get("court_as_recorded"), record.get("court_state"))))
             )
-            if normalized_location and normalized_location not in normalized_court:
-                best_confidence = round(max(0.7, best_confidence - 0.08), 2)
-                best_reason = f"{best_reason}; court location did not match the supplied location context"
-                if best_confidence < 0.75 and best_match_type == "possible":
-                    best_match_type = "weak"
-            elif normalized_location:
-                best_reason = f"{best_reason}; court location aligned with the supplied location context"
+            if court_text and normalized_location in court_text:
+                reason += "; court is in the location given"
+            elif court_text:
+                confidence = max(0.0, confidence - 0.05)
+                reason += "; court is not in the location given"
 
         ranked_matches.append(
             {
-                "match_type": best_match_type,
-                "confidence": round(best_confidence, 2),
-                "reason": best_reason,
+                "match_type": best.match_type,
+                "confidence": round(confidence, 2),
+                "reason": reason,
                 "record": record,
             }
         )
 
     ranked_matches.sort(
         key=lambda item: (
-            0 if item["match_type"] == "exact" else 1,
+            MATCH_RANK[item["match_type"]],
             -item["confidence"],
             item["record"].get("name", ""),
+            item["record"].get("record_id") or "",
         )
     )
+    total_found = len(ranked_matches)
     ranked_matches = ranked_matches[:limit]
 
     exact_matches = sum(1 for item in ranked_matches if item["match_type"] == "exact")
-    possible_matches = sum(1 for item in ranked_matches if item["match_type"] == "possible")
+    possible_matches = len(ranked_matches) - exact_matches
     highest_confidence = max((item["confidence"] for item in ranked_matches), default=0.0)
 
-    if exact_matches > 0 or highest_confidence >= 0.95:
+    if single_name_query and ranked_matches:
+        status_value = "review"
+        summary_text = (
+            f"Only a single name was searched, which matches {total_found} record(s) and cannot identify a person. "
+            "Search with the person's full name."
+        )
+    elif exact_matches:
         status_value = "match"
         summary_text = (
             "A record with the same name was found. A name match does not show that the record is about this person; "

@@ -58,6 +58,16 @@ const DeveloperReportView = ({ isDark, report, loading = false }) => {
               </div>
             </div>
             <p className={`mt-3 text-sm ${mutedClass}`}>{match.reason}</p>
+            <p className={`mt-2 text-xs ${mutedClass}`}>
+              {[
+                match.record.record_id,
+                match.record.charge_number && `Charge ${match.record.charge_number}`,
+                match.record.court,
+                match.record.date_of_conviction,
+              ]
+                .filter(Boolean)
+                .join(" · ")}
+            </p>
           </div>
         ))}
       </div>
